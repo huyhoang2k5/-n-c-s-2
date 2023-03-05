@@ -1,2 +1,2 @@
-# quan_ly_kho
+# Quản lý kho
  
