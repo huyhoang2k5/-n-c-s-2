@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\LoaiHang;
+use App\Models\HangHoa;
 use App\Models\TrangThai;
 use Illuminate\Http\Request;
-use App\Http\Requests\LoaiHangRequest;
+use App\Http\Requests\LoaiHangStoreRequest;
+use App\Http\Requests\LoaiHangUpdateRequest;
 
 class LoaiHangController extends Controller
 {
@@ -14,6 +16,7 @@ class LoaiHangController extends Controller
      */
     public function index()
     {
+        $title = "Quản lý loại hàng";
         $loai_hang = [];
 
         LoaiHang::orderBy('id')->chunkById(100, function ($chunk) use (&$loai_hang) {
@@ -22,7 +25,7 @@ class LoaiHangController extends Controller
             }
         });
 
-        return view('loaihang.index', compact('loai_hang'));
+        return view('loaihang.index', compact('loai_hang', 'title'));
     }
 
     /**
@@ -30,31 +33,35 @@ class LoaiHangController extends Controller
      */
     public function create()
     {
+        $title = 'Thêm mới loại hàng';
         $trang_thai = TrangThai::get();
 
-        return view('loaihang.create', compact('trang_thai'));
+        return view('loaihang.create', compact('trang_thai', 'title'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(LoaiHangRequest $request)
+    public function store(LoaiHangStoreRequest $request)
     {
         $data = $request->all();
 
-        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
+        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Loại hàng này chưa có mô tả cụ thể!';
 
-        $loai_hang = LoaiHang::firstOrCreate([
+        $status = LoaiHang::firstOrCreate([
             'ten_loai_hang' => $data['ten_loai_hang']
         ],
         [
             'ten_loai_hang' => $data['ten_loai_hang'],
-            'trang_thai' => $data['trang_thai'],
-            'mo_ta' => $mo_ta ?? 'Loại hàng này chưa có mô tả cụ thể!'
-
+            'trang_thai' => $data['trang_thai'] ?? 3,
+            'mo_ta' => $mo_ta
         ]);
 
-        return redirect()->action([LoaiHangController::class, 'index'])->with('status-success', 'Thêm mới loại hàng thành công!');
+        if ($status) {
+            return redirect()->route('loai-hang.index')->with(['status' => 'Thêm mới loại hàng thành công!', 'type' => 'success']);
+        } else {
+            return back()->with(['status' => 'Thêm mới loại hàng thất bại do lỗi hoặc đã tồn tại trước đó', 'type' => 'danger']);
+        }
     }
 
     /**
@@ -62,7 +69,15 @@ class LoaiHangController extends Controller
      */
     public function show($id)
     {
+        $loai_hang = LoaiHang::findOrFail($id);
+        $title = $loai_hang->ten_loai_hang;
+        $hang_hoa = HangHoa::where('id_loai_hang', $id)->get();
 
+        if ($loai_hang) {
+            return view('loaihang.show', compact('loai_hang', 'hang_hoa', 'title'));
+        } else {
+            return back()->with(['status' => 'Không tìm thấy loại hàng, xin vui lòng thử lại!', 'type' => 'danger']);
+        }
     }
 
     /**
@@ -70,33 +85,32 @@ class LoaiHangController extends Controller
      */
     public function edit($id)
     {
-        $trang_thai = TrangThai::get();
         $loai_hang = LoaiHang::findOrFail($id);
-        // dd($loai_hang);
+        $title = "Sửa thông tin " . $loai_hang->ten_loai_hang;
+        $trang_thai = TrangThai::get();
 
-        return view('loaihang.edit', compact('loai_hang', 'trang_thai'));
+        return view('loaihang.edit', compact('loai_hang', 'trang_thai', 'title'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(LoaiHangUpdateRequest $request, $id)
     {
         $data = $request->all();
+        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Loại hàng này chưa có mô tả cụ thể!';
 
         $loai_hang = LoaiHang::findOrFail($id);
-        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
+        $status = $loai_hang->update([
+            'ten_loai_hang' => $data['ten_loai_hang'],
+            'trang_thai' => $data['trang_thai'],
+            'mo_ta' => $data['mo_ta']
+        ]);
 
-        $loai_hang->ten_loai_hang = $data['ten_loai_hang'];
-        $loai_hang->trang_thai = $data['trang_thai'];
-        $loai_hang->mo_ta = $mo_ta;
-
-        $loai_hang->save();
-
-        if ($loai_hang->save()) {
-            return redirect()->action([LoaiHangController::class, 'index'])->with('status-success', 'Sửa thông tin loại hàng thành công!');
+        if ($status) {
+            return redirect()->route('loai-hang.index')->with(['status' => 'Sửa thông tin loại hàng thành công!', 'type' => 'success']);
         } else {
-            return redirect()->back()->with('status-danger', 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!');
+            return back()->with(['status' => 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!', 'type' => 'danger']);
         }
     }
 
@@ -105,10 +119,12 @@ class LoaiHangController extends Controller
      */
     public function destroy($id)
     {
-        LoaiHang::destroy($id);
+        $status = LoaiHang::destroy($id);
 
-        return redirect()
-            ->route('loai-hang.index')
-            ->with('status-success', 'Xóa loại hàng hóa thành công');
+        if ($status) {
+            return redirect()->action([LoaiHangController::class, 'index'])->with(['status' => 'Xóa loại hàng hóa thành công', 'type' => 'success']);
+        } else{
+            return back()->with(['status' => 'Có lỗi trong quá trình xóa. Xin vui lòng thử lại!', 'type' => 'danger']);
+        }
     }
 }

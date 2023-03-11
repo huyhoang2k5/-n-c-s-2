@@ -12,4 +12,9 @@ class NhaCungCap extends Model
     protected $table = 'nha_cung_cap';
 
     protected $guarded = ['id'];
+
+    public function getTrangThai()
+    {
+        return $this->hasOne('App\Models\TrangThai', 'id', 'trang_thai');
+    }
 }

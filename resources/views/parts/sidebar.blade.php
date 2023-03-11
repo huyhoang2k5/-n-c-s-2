@@ -48,7 +48,7 @@
                                     class="nk-menu-icon"><em class="icon ni ni-unarchive"></em></span><span
                                     class="nk-menu-text">Quản lý xuất kho</span></a></li>
 
-                        <li class="{{ request()->is('nha-cung-cap') ? 'active' : '' }}"><a href="{{ route('nha-cung-cap.index') }}" class="nk-menu-link"><span
+                        <li class="{{ request()->is('nha-cung-cap*') ? 'active' : '' }}"><a href="{{ route('nha-cung-cap.index') }}" class="nk-menu-link"><span
                                     class="nk-menu-icon"><em class="icon ni ni-building"></em></span><span
                                     class="nk-menu-text">Quản lý nhà cung cấp</span></a></li>
 

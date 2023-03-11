@@ -9,15 +9,16 @@
                         <div class="nk-block-head-between flex-wrap gap g-2">
                             <div class="nk-block-head-content">
                                 <h2 class="nk-block-title">Nhà cung cấp</h2>
-                                    <nav>
-                                        <ol class="breadcrumb breadcrumb-arrow mb-0">
-                                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
-                                            </li>
-                                            <li class="breadcrumb-item"><a href="{{ route('nha-cung-cap.index') }}">Nhà cung cấp</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Danh sách
-                                            </li>
-                                        </ol>
-                                    </nav>
+                                <nav>
+                                    <ol class="breadcrumb breadcrumb-arrow mb-0">
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
+                                        </li>
+                                        <li class="breadcrumb-item"><a href="{{ route('nha-cung-cap.index') }}">Nhà cung
+                                                cấp</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Danh sách
+                                        </li>
+                                    </ol>
+                                </nav>
                             </div>
                             <div class="nk-block-head-content">
                                 <ul class="d-flex">
@@ -37,8 +38,10 @@
                             <table class="datatable-init table" data-nk-container="table-responsive">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="tb-col tb-col-md"><span class="overline-title">Mã nhà cung cấp</span></th>
+                                        <th class="tb-col tb-col-md"><span class="overline-title">Mã nhà cung cấp</span>
+                                        </th>
                                         <th class="tb-col"><span class="overline-title">Tên nhà cung cấp</span></th>
+                                        <th class="tb-col tb-col-md"><span class="overline-title">Trạng thái</span></th>
                                         <th class="tb-col tb-col-end" data-sortable="false"><span
                                                 class="overline-title">action</span></th>
                                     </tr>
@@ -48,9 +51,11 @@
                                         <tr>
                                             <td class="tb-col tb-col-md"><span>#{{ $ncc->ma_ncc }}</span></td>
                                             <td class="tb-col">
-                                                <div class="media-text"><a href="edit-product.html"
+                                                <div class="media-text"><a href="{{ route('nha-cung-cap.edit', $ncc->id) }}"
                                                         class="title">{{ $ncc->ten_ncc }}</a></div>
                                             </td>
+                                            <td class="tb-col tb-col-md"><span
+                                                class="badge text-bg-{{ $ncc->trang_thai == 3 ? 'success' : ($ncc->trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $ncc->getTrangThai->ten_trang_thai }}</span></td>
                                             <td class="tb-col tb-col-end">
                                                 <div class="dropdown"><a href="#"
                                                         class="btn btn-sm btn-icon btn-zoom me-n1"
@@ -61,13 +66,6 @@
                                                                 <li><a href="{{ route('nha-cung-cap.edit', $ncc->id) }}"><em
                                                                             class="icon ni ni-edit"></em><span>Sửa</span></a>
                                                                 </li>
-                                                                <li>
-                                                                    <a href="#" data-bs-toggle="modal"
-                                                                        data-bs-target="#xoancc">
-                                                                        <em class="icon ni ni-trash"></em>
-                                                                        <span>Xóa</span>
-                                                                    </a>
-                                                                </li>
                                                                 <li><a href="products.html"><em
                                                                             class="icon ni ni-eye"></em><span>Xem chi
                                                                             tiết</span></a></li>
@@ -77,38 +75,6 @@
                                                 </div>
                                             </td>
                                         </tr>
-
-                                        <div class="modal fade" id="xoancc" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="scrollableLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-top">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="scrollableLabel">Bạn
-                                                            chắc chắc muốn xóa?
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">Đồng ý
-                                                        nghĩa là bạn muốn xóa toàn
-                                                        bộ dữ liệu liên quan đến
-                                                        nhà cung cấp này!
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-sm btn-secondary"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <form method="POST"
-                                                            action="{{ route('nha-cung-cap.delete', $ncc->id) }}"
-                                                            id="delete-form">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <button type="submit" class="btn btn-sm btn-primary">Đồng
-                                                                ý</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     @endforeach
 
                                 </tbody>
@@ -120,7 +86,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('script')
 @endsection

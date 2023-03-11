@@ -30,12 +30,12 @@
                                             <div class="card card-gutter-md">
                                                 <div class="card-body">
                                                     <div class="row g-gs">
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div class="form-group"><label for="ten_ncc"
                                                                     class="form-label">Tên nhà cung cấp</label>
                                                                 <div class="form-control-wrap"><input type="text"
                                                                         class="form-control" id="ten_ncc"
-                                                                        name="ten_ncc"
+                                                                        name="ten_ncc" maxlength="100" minlength="1"
                                                                         value="{{ old('ten_ncc') }}"
                                                                         placeholder="Tên nhà cung cấp" required>
                                                                 </div>
@@ -50,7 +50,7 @@
                                                                     class="form-label">Mã nhà cung cấp</label>
                                                                 <div class="form-control-wrap"><input type="text"
                                                                         class="form-control" id="ma_ncc"
-                                                                        name="ma_ncc"
+                                                                        name="ma_ncc" maxlength="100" minlength="1"
                                                                         value="{{ old('ma_ncc') }}"
                                                                         placeholder="Mã nhà cung cấp" required>
                                                                 </div>
@@ -65,7 +65,7 @@
                                                                     class="form-label">Số điện thoại</label>
                                                                 <div class="form-control-wrap"><input type="text"
                                                                         class="form-control" id="sdt"
-                                                                        name="sdt"
+                                                                        name="sdt" maxlength="12" minlength="10"
                                                                         value="{{ old('sdt') }}"
                                                                         placeholder="Số điện thoại" required>
                                                                 </div>
@@ -75,12 +75,27 @@
                                                                 @endif
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group"><label class="form-label">Trạng
+                                                                    thái</label>
+                                                                <div class="form-control-wrap">
+                                                                    <select class="js-select" name="trang_thai"
+                                                                        data-search="true" data-sort="false">
+                                                                        <option value="">Select an option</option>
+                                                                        @foreach ($trang_thai as $tt)
+                                                                            <option value="{{ $tt->id }}"
+                                                                                {{ old('trang_thai') == $tt->id ? 'selected' : '' }}>{{ $tt->ten_trang_thai }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-lg-12">
                                                             <div class="form-group"><label for="dia_chi"
                                                                     class="form-label">Địa chỉ</label>
                                                                 <div class="form-control-wrap"><input type="text"
                                                                         class="form-control" id="dia_chi"
-                                                                        name="dia_chi"
+                                                                        name="dia_chi" maxlength="255" minlength="0"
                                                                         value="{{ old('dia_chi') }}"
                                                                         placeholder="Địa chỉ" required>
                                                                 </div>

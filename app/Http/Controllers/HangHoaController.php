@@ -6,6 +6,8 @@ use App\Models\HangHoa;
 use App\Models\LoaiHang;
 use App\Models\ChiTietHangHoa;
 use Illuminate\Http\Request;
+use App\Http\Requests\HangHoaStoreRequest;
+use App\Http\Requests\HangHoaUpdateRequest;
 use Storage;
 
 class HangHoaController extends Controller
@@ -16,6 +18,7 @@ class HangHoaController extends Controller
     public function index()
     {
         $hang_hoa = [];
+        $title = "Quản lý kho";
 
         HangHoa::orderBy('id')->chunkById(100, function ($chunk) use (&$hang_hoa) {
             foreach ($chunk as $hang) {
@@ -25,7 +28,7 @@ class HangHoaController extends Controller
             }
         });
 
-        return view('khohang.index', compact('hang_hoa'));
+        return view('khohang.index', compact('hang_hoa', 'title'));
     }
 
     /**
@@ -33,9 +36,10 @@ class HangHoaController extends Controller
      */
     public function create()
     {
-        $loai_hang = LoaiHang::where('trang_thai', '=', 3)->get();
+        $loai_hang = LoaiHang::where('trang_thai', 3)->get();
+        $title = "Thêm mới hàng hóa";
 
-        return view('khohang.create', compact('loai_hang'));
+        return view('khohang.create', compact('loai_hang', 'title'));
     }
 
     /**
@@ -52,7 +56,7 @@ class HangHoaController extends Controller
             $path = $request->file('change_img')->storeAs('public/images/hanghoa', $file_name);
         }
 
-        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
+        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Hàng hóa này chưa có mô tả cụ thể!';
 
         $hang_hoa = HangHoa::firstOrCreate([
             'ma_hang_hoa' => $data['ma_hang_hoa']
@@ -68,12 +72,12 @@ class HangHoaController extends Controller
         ]);
 
         if ($hang_hoa->wasRecentlyCreated) {
-            return redirect()->action([HangHoaController::class, 'index'])->with('status-success', 'Thêm mới hàng hóa thành công!');
-            // user just created in the database; it didn't exist before.
-            // return redirect()->route('khohang.index')->with('status', 'Thêm mới hàng hóa thành công!');
+            return redirect()->route('hang-hoa.index')->with(['status' => 'Thêm mới hàng hóa thành công!', 'type' => 'success']);
         } else {
-            // user already existed and was pulled from database.
-            return redirect()->back()->with('status-error', 'Thêm mới thất bại do đã tồn tại hàng hóa từ trước hoặc do lỗi!')->withInput();
+            if ($request->hasFile('change_img')) {
+                unlink(storage_path('app/public/images/hanghoa/' . $file_name));
+            }
+            return redirect()->back()->with(['status' => 'Thêm mới thất bại do đã tồn tại hàng hóa từ trước hoặc do lỗi!', 'type' => 'danger']);
         }
     }
 
@@ -83,9 +87,14 @@ class HangHoaController extends Controller
     public function show($code)
     {
         $hang_hoa = HangHoa::where('ma_hang_hoa', $code)->firstOrFail();
-        $chi_tiet_hang_hoa = ChiTietHangHoa::where('ma_hang_hoa', $code)->get();
+        $title = $hang_hoa->ten_hang_hoa;
 
-        return view('khohang.show', compact('hang_hoa', 'chi_tiet_hang_hoa'));
+        if ($hang_hoa) {
+            $chi_tiet_hang_hoa = ChiTietHangHoa::where('ma_hang_hoa', $code)->where('trang_thai', 3)->get()->sortByDesc('id')->all();
+            return view('khohang.show', compact('hang_hoa', 'chi_tiet_hang_hoa', 'title'));
+        } else {
+            return back()->with(['status' => 'Không tìm thấy hàng hóa, xin vui lòng thử lại sau!', 'type' => 'danger']);
+        }
     }
 
     /**
@@ -93,10 +102,15 @@ class HangHoaController extends Controller
      */
     public function edit($code)
     {
-        $loai_hang = LoaiHang::where('trang_thai', '=', 3)->get();
+        $loai_hang = LoaiHang::where('trang_thai', 3)->get();
         $hang_hoa = HangHoa::where('ma_hang_hoa', $code)->firstOrFail();
+        $title = "Sửa thông tin " . $hang_hoa->ten_hang_hoa;
 
-        return view('khohang.edit', compact('hang_hoa', 'loai_hang'));
+        if ($hang_hoa) {
+            return view('khohang.edit', compact('hang_hoa', 'loai_hang', 'title'));
+        } else {
+            return back()->with(['status' => 'Không tìm thấy hàng hóa, xin vui lòng thử lại sau!', 'type' => 'danger']);
+        }
     }
 
     /**
@@ -108,31 +122,31 @@ class HangHoaController extends Controller
 
         $hang_hoa = HangHoa::where('ma_hang_hoa', $code)->firstOrFail();
         $file_name = $hang_hoa->img;
+        $file_name_2 = $hang_hoa->img;
 
         if ($request->hasFile('change_img')) {
             $img = $request->file('change_img');
             $file_name = time() . '.' . $img->getClientOriginalExtension();
             $path = $request->file('change_img')->storeAs('public/images/hanghoa', $file_name);
-            unlink(storage_path('app/public/images/hanghoa/'.$hang_hoa->img));
         }
 
-        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
+        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Hàng hóa này chưa có mô tả cụ thể!';
 
-        $hang_hoa->ma_hang_hoa = $data['ma_hang_hoa'];
-        $hang_hoa->ten_hang_hoa = $data['ten_hang_hoa'];
-        $hang_hoa->id_loai_hang = $data['loai_hang_hoa'];
-        $hang_hoa->don_vi_tinh = $data['don_vi_tinh'];
-        $hang_hoa->barcode = $data['barcode'];
-        $hang_hoa->img = $file_name;
-        $hang_hoa->mo_ta = $mo_ta;
+        $status = $hang_hoa->update([
+            'ma_hang_hoa' => $data['ma_hang_hoa'],
+            'ten_hang_hoa' => $data['ten_hang_hoa'],
+            'id_loai_hang' => $data['id_loai_hang'],
+            'don_vi_tinh' => $data['don_vi_tinh'],
+            'barcode' => $data['barcode'],
+            'img' => $file_name,
+            'mo_ta' => $mo_ta
+        ]);
 
-
-        $hang_hoa->save();
-
-        if ($hang_hoa->save()) {
-            return redirect()->action([HangHoaController::class, 'index'])->with('status-success', 'Sửa thông tin hàng hóa thành công!');
+        if ($status) {
+            unlink(storage_path('app/public/images/hanghoa/' . $file_name_2));
+            return redirect()->route('hang-hoa.index')->with(['status' => 'Sửa thông tin hàng hóa thành công!', 'type' => 'success']);
         } else {
-            return redirect()->back()->with('status-danger', 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!');
+            return back()->with(['status' => 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!', 'type' => 'danger']);
         }
     }
 
@@ -141,10 +155,11 @@ class HangHoaController extends Controller
      */
     public function destroy($id)
     {
-        HangHoa::destroy($id);
-
-        return redirect()
-            ->route('hang-hoa.index')
-            ->with('status-success', 'Xóa hàng hóa thành công');
+        $status = HangHoa::destroy($id);
+        if ($status) {
+            return redirect()->route('hang-hoa.index')->with(['status' => 'Xóa hàng hóa thành công', 'type' => 'success']);
+        } else{
+            return back()->with(['status' => 'Có lỗi trong quá trình xóa. Xin vui lòng thử lại!', 'type' => 'danger']);
+        }
     }
 }

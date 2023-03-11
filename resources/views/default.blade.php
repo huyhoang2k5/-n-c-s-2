@@ -10,7 +10,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Quản lý loại hàng') }}</title>
+    <title>{{ $title ?? "Quản lý kho" }}</title>
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -38,16 +38,15 @@
                 @include('parts.header')
 
                 <div class="nk-content">
-                    @if (session('status-success'))
-                        <div class="alert alert-success" id="success">
-                            {{ session('status-success') }}
+                    @if (session('status'))
+                        <div class="alert alert-{{ session('type') }}" id="{{ session('type') }}">
+                            {{ session('status') }}
                         </div>
-                    @endif
-
-                    @if (session('status-error'))
-                        <div class="alert alert-danger" id="danger">
-                            {{ session('status-danger') }}
-                        </div>
+                        <script>
+                            setTimeout(function() {
+                                document.getElementById({{ session('type') }}).style.display = "none";
+                            }, 5000); // 5000 milliseconds = 5 seconds
+                        </script>
                     @endif
 
                     @yield('content')
@@ -76,15 +75,7 @@
     {{-- Editor --}}
     {{-- <script src="{{ asset('assets/js/libs/editors/quill.js') }}"></script>
     <script src="{{ asset('assets/js/editors/quill.js') }}"></script> --}}
-    <script>
-        setTimeout(function() {
-            document.getElementById("success").style.display = "none";
-        }, 5000); // 5000 milliseconds = 5 seconds
 
-        setTimeout(function() {
-            document.getElementById("danger").style.display = "none";
-        }, 5000); // 5000 milliseconds = 5 seconds
-    </script>
     @yield('script')
 </body>
 

@@ -12,7 +12,7 @@
                                         <ol class="breadcrumb breadcrumb-arrow mb-0">
                                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
                                             </li>
-                                            <li class="breadcrumb-item"><a href="{{ route('nha-cung-cap.index') }}">Nhà cung cấp</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ route('nhap-kho.index') }}">Quản lý nhập kho</a></li>
                                             <li class="breadcrumb-item active" aria-current="page">Sửa</li>
                                         </ol>
                                     </nav>

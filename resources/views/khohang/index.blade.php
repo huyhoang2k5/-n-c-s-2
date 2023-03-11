@@ -132,6 +132,7 @@
                                                             @method('delete')
                                                             <button type="submit" class="btn btn-sm btn-primary">Đồng
                                                                 ý</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>

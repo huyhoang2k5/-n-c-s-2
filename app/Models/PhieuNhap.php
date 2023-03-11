@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class PhieuNhap extends Model
 {
@@ -13,8 +14,13 @@ class PhieuNhap extends Model
 
     protected $guarded = ['id'];
 
-    public function getChiTietPhieuNhap()
+    public function getChiTietHangHoa()
     {
-        return $this->hasOne('App\Models\ChiTietPhieuNhap', 'ma_phieu_nhap', 'ma_phieu_nhap');
+        return $this->hasOne('App\Models\ChiTietHangHoa', 'ma_phieu_nhap', 'ma_phieu_nhap');
+    }
+
+    public function getUsers()
+    {
+        return $this->belongsTo('App\Models\User', 'id_user');
     }
 }

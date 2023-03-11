@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('phieu_nhap', function (Blueprint $table) {
             $table->id();
             $table->string('ma_phieu_nhap');
-            $table->foreignId('id_user')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('id_user')->constrained('users')->cascadeOnDelete();
             $table->date('ngay_nhap')->nullable()->default(now()->toDateString());
             $table->string('mo_ta')->nullable();
             $table->timestamps();

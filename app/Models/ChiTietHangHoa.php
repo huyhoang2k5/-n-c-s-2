@@ -13,13 +13,14 @@ class ChiTietHangHoa extends Model
 
     protected $guarded = ['id'];
 
+
     public function getHangHoa()
     {
         return $this->belongsTo('App\Models\HangHoa', 'ma_hang_hoa', 'ma_hang_hoa');
     }
 
-    public function getChiTietPhieuNhap()
+    public function getPhieuNhap()
     {
-        return $this->belongsTo('App\Models\ChiTietPhieuNhap', 'ma_hang_hoa', 'ma_hang_hoa');
+        return $this->belongsTo('App\Models\PhieuNhap', 'ma_phieu_nhap', 'ma_phieu_nhap');
     }
 }

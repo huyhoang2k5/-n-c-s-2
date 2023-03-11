@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ExcelRequest extends FormRequest
+class LoaiHangUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,16 @@ class ExcelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'excel_file' => 'required|mimes:xls,xlsx|max:10240' // tệp Excel phải có định dạng xls hoặc xlsx, và kích thước không quá 10MB
+            'ten_loai_hang' => 'required|min:2|max:100'
         ];
     }
 
-    public function message()
+    public function messages()
     {
         return [
-            'excel_file.required' => 'Bạn chưa thêm file!',
-            'excel_file.mines' => 'Chỉ chấp nhận định dạng file là xls hoặc xlsx!',
-            'excel_file.max' => 'Dung lượng file tối đa có thể xử lý là 10mb!',
+            'ten_loai_hang.required' => 'Cần thêm tên loại hàng!',
+            'ten_loai_hang.min' => 'Tên loại hàng phải lớn hơn 2 kí tự!',
+            'ten_loai_hang.max' => 'Độ dài cho phép tối đa là 100 kí tự!'
         ];
     }
 }

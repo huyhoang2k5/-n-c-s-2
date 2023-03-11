@@ -37,7 +37,7 @@
                             <table class="datatable-init table" data-nk-container="table-responsive" id="loai-hoa">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="tb-col"><span class="overline-title">Tên hàng hóa</span></th>
+                                        <th class="tb-col"><span class="overline-title">Tên loại hàng</span></th>
                                         <th class="tb-col"><span class="overline-title">Số lượng</span></th>
                                         <th class="tb-col"><span class="overline-title">Trạng thái</span></th>
                                         <th class="tb-col tb-col-end" data-sortable="false"><span
@@ -49,13 +49,13 @@
                                     @foreach ($loai_hang as $loai)
                                         <tr>
                                             <td class="tb-col">
-                                                <div class="media-text"><a href="edit-product.html"
+                                                <div class="media-text"><a href="{{ route('loai-hang.show', $loai->id) }}"
                                                         class="title">{{ $loai->ten_loai_hang }}</a></div>
                                             </td>
                                             <td class="tb-col"><span>{{ $loai->getHangHoa->count() }}</span></td>
                                             <td class="tb-col">
                                                 <span
-                                                    class="badge text-bg-{{ $loai->getTrangThai->id == 3 ? 'success' : ($loai->getTrangThai->id == 2 ? 'warning' : 'danger') }}-soft">{{ $loai->getTrangThai->ten_trang_thai }}</span>
+                                                    class="badge text-bg-{{ $loai->trang_thai == 3 ? 'success' : ($loai->trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $loai->getTrangThai->ten_trang_thai }}</span>
                                             </td>
                                             <td class="tb-col tb-col-end">
                                                 <div class="dropdown"><a href="#"
@@ -74,7 +74,7 @@
                                                                         <span>Xóa</span>
                                                                     </a>
                                                                 </li>
-                                                                <li><a href="products.html"><em
+                                                                <li><a href="{{ route('loai-hang.show', $loai->id) }}"><em
                                                                             class="icon ni ni-eye"></em><span>Xem chi
                                                                             tiết</span></a></li>
                                                             </ul>

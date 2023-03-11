@@ -104,6 +104,9 @@
             theme: 'snow'
         });
 
+        let mo_ta = document.querySelector('input[name=mo_ta]').value;
+        quill.setContents(quill.clipboard.convert(mo_ta));
+
         const form = document.querySelector('#form-create');
         form.onsubmit = function(e) {
             const mo_ta = document.querySelector('input[name=mo_ta]');

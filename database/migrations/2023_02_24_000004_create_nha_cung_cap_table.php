@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('ma_ncc');
             $table->string('ten_ncc');
-            $table->integer('trang_thai')->default(1);
+            $table->integer('trang_thai')->default(3);
             $table->string('dia_chi')->nullable();
             $table->integer('sdt')->nullable();
             $table->string('mo_ta')->nullable();

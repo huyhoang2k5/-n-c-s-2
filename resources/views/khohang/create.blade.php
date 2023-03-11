@@ -1,11 +1,6 @@
 @extends('default')
 @section('content')
     <div class="nk-content">
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
         <div class="container">
             <div class="nk-content-inner">
                 <div class="nk-content-body">
@@ -26,7 +21,7 @@
                         </div>
                     </div>
                     <div class="nk-block">
-                        <form action="{{ route('hang-hoa.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('hang-hoa.store') }}" method="POST" enctype="multipart/form-data" id="form-create">
                             @csrf
                             <div class="row g-gs">
                                 <div class="col-xxl-9">
@@ -75,8 +70,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
-                                                            <div class="form-group"><label class="form-label">Chi
-                                                                    tiết</label>
+                                                            <div class="form-group">
+                                                                <label class="form-label">Chi tiết</label>
                                                                 <div class="form-control-wrap">
                                                                     <div class="js-quill" id="quill_editor"
                                                                         value="{!! old('mo_ta') !!}"
