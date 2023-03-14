@@ -307,7 +307,6 @@
             });
 
             return true
-
         }
     </script>
 @endsection

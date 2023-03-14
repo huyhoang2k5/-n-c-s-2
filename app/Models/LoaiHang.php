@@ -15,12 +15,12 @@ class LoaiHang extends Model
 
     public function getHangHoa()
     {
-        return $this->hasMany('App\Models\HangHoa', 'id_loai_hang');
+        return $this->hasMany(HangHoa::class, 'id_loai_hang');
     }
 
     public function getTrangThai()
     {
-        return $this->hasOne('App\Models\TrangThai', 'id', 'trang_thai');
+        return $this->hasOne(TrangThai::class, 'id', 'trang_thai');
     }
 
 }

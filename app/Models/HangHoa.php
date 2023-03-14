@@ -27,11 +27,11 @@ class HangHoa extends Model
 
     public function getLoaiHang()
     {
-        return $this->belongsTo('App\Models\LoaiHang', 'id_loai_hang');
+        return $this->belongsTo(LoaiHang::class, 'id_loai_hang');
     }
 
     public function getChiTiet()
     {
-        return $this->hasMany('App\Models\ChiTietHangHoa', 'ma_hang_hoa', 'ma_hang_hoa');
+        return $this->hasMany(ChiTietHangHoa::class, 'ma_hang_hoa', 'ma_hang_hoa');
     }
 }

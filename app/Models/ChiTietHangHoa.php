@@ -16,11 +16,11 @@ class ChiTietHangHoa extends Model
 
     public function getHangHoa()
     {
-        return $this->belongsTo('App\Models\HangHoa', 'ma_hang_hoa', 'ma_hang_hoa');
+        return $this->belongsTo(HangHoa::class, 'ma_hang_hoa', 'ma_hang_hoa');
     }
 
     public function getPhieuNhap()
     {
-        return $this->belongsTo('App\Models\PhieuNhap', 'ma_phieu_nhap', 'ma_phieu_nhap');
+        return $this->belongsTo(PhieuNhap::class, 'ma_phieu_nhap', 'ma_phieu_nhap');
     }
 }
