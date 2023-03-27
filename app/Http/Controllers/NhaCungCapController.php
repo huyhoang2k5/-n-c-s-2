@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\NhaCungCap;
+use App\Models\ChiTietHangHoa;
 use App\Models\TrangThai;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class NhaCungCapController extends Controller
      */
     public function index()
     {
-        $title = "Quản lý nhag cung cấp";
+        $title = "Quản lý nhà cung cấp";
         $nha_cung_cap = NhaCungCap::get();
 
         return view('nhacungcap.index', compact('nha_cung_cap', 'title'));
@@ -26,8 +27,9 @@ class NhaCungCapController extends Controller
     {
         $title = "Thêm mới nhà cung cấp";
         $trang_thai = TrangThai::get();
+        $nha_cung_cap = NhaCungCap::get();
 
-        return view('nhacungcap.create', compact('trang_thai', 'title'));
+        return view('nhacungcap.create', compact('trang_thai', 'title', 'nha_cung_cap'));
     }
 
     /**
@@ -47,7 +49,7 @@ class NhaCungCapController extends Controller
             'ten_ncc' => $data['ten_ncc'],
             'dia_chi' => $data['dia_chi'],
             'sdt' => $data['sdt'],
-            'trang_thai' => $data['trang_thai'] ?? 3,
+            'id_trang_thai' => $data['id_trang_thai'] ?? 3,
             'mo_ta' => $mo_ta
         ]);
 
@@ -61,17 +63,25 @@ class NhaCungCapController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(NhaCungCap $nhaCungCap)
+    public function show($code)
     {
-        //
+        $nha_cung_cap = NhaCungCap::where('ma_ncc', $code)->first();
+        $chi_tiet_hang_hoa = ChiTietHangHoa::where('ma_ncc', $code)->get()->sortByDesc('id')->all();
+        $title = "Xem thông tin " . $nha_cung_cap->ten_ncc;
+
+        if ($nha_cung_cap) {
+            return view('nhacungcap.show', compact('nha_cung_cap', 'title', 'chi_tiet_hang_hoa'));
+        } else {
+            return back()->with(['status' => 'Không tìm thấy nhà cung cấp, xin vui lòng thử lại sau!', 'type' => 'danger']);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($code)
     {
-        $nha_cung_cap = NhaCungCap::findOrFail($id);
+        $nha_cung_cap = NhaCungCap::where('ma_ncc', $code)->first();
         $title = "Sửa thông tin " . $nha_cung_cap->ten_ncc;
         $trang_thai = TrangThai::get();
 
@@ -85,7 +95,7 @@ class NhaCungCapController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $code)
     {
         $request->validate([
             'sdt' => 'required|regex:/(0)[0-9]{9}/'
@@ -96,7 +106,7 @@ class NhaCungCapController extends Controller
 
         $data = $request->all();
 
-        $nha_cung_cap = NhaCungCap::findOrFail($id);
+        $nha_cung_cap = NhaCungCap::where('ma_ncc', $code)->first();
 
         $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Nhà cung cấp này chưa có mô tả cụ thể!';
 
@@ -105,7 +115,7 @@ class NhaCungCapController extends Controller
             'ten_ncc' => $data['ten_ncc'],
             'dia_chi' => $data['dia_chi'],
             'sdt' => $data['sdt'],
-            'trang_thai' => $data['trang_thai'],
+            'id_trang_thai' => $data['id_trang_thai'],
             'mo_ta' => $file_name,
             'mo_ta' => $mo_ta
         ]);

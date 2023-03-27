@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('phieu_xuat', function (Blueprint $table) {
             $table->id();
+            $table->char('ma_phieu_xuat');
             $table->string('khach_hang');
-            $table->string('dia_chi');
-            $table->date('ngay_xuat')->nullable()->default(now()->toDateString());
-            $table->string('chi_tiet')->nullable();
+            $table->text('dia_chi');
+            $table->date('ngay_xuat')->default(now()->toDateString());
+            $table->text('mo_ta')->nullable();
             $table->foreignId('id_user')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });

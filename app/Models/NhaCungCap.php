@@ -15,6 +15,11 @@ class NhaCungCap extends Model
 
     public function getTrangThai()
     {
-        return $this->hasOne(TrangThai::class, 'id', 'trang_thai');
+        return $this->hasOne(TrangThai::class, 'id', 'id_trang_thai');
+    }
+
+    public function getChiTietHangHoa()
+    {
+        return $this->hasMany(ChiTietHangHoa::class, 'ma_ncc', 'ma_ncc');
     }
 }

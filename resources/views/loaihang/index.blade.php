@@ -8,7 +8,7 @@
                     <div class="nk-block-head">
                         <div class="nk-block-head-between flex-wrap gap g-2">
                             <div class="nk-block-head-content">
-                                <h2 class="nk-block-title">Quản lý loại hàng hóa</h2>
+                                <h2 class="nk-block-title">Quản lý loại hàng</h2>
                                     <nav>
                                         <ol class="breadcrumb breadcrumb-arrow mb-0">
                                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
@@ -55,7 +55,7 @@
                                             <td class="tb-col"><span>{{ $loai->getHangHoa->count() }}</span></td>
                                             <td class="tb-col">
                                                 <span
-                                                    class="badge text-bg-{{ $loai->trang_thai == 3 ? 'success' : ($loai->trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $loai->getTrangThai->ten_trang_thai }}</span>
+                                                    class="badge text-bg-{{ $loai->id_trang_thai == 3 ? 'success' : ($loai->id_trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $loai->getTrangThai->ten_trang_thai }}</span>
                                             </td>
                                             <td class="tb-col tb-col-end">
                                                 <div class="dropdown"><a href="#"

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('loai_hang', function (Blueprint $table) {
             $table->id();
             $table->string('ten_loai_hang');
-            $table->integer('trang_thai')->default(2);
-            $table->string('mo_ta')->nullable()->default('Mặt hàng này chưa có mô tả cụ thể.');
+            $table->integer('id_trang_thai')->default(3);
+            $table->text('mo_ta')->nullable();
             $table->timestamps();
         });
     }

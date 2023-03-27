@@ -20,7 +20,7 @@ class LoaiHang extends Model
 
     public function getTrangThai()
     {
-        return $this->hasOne(TrangThai::class, 'id', 'trang_thai');
+        return $this->beLongsTo(TrangThai::class, 'id_trang_thai');
     }
 
 }

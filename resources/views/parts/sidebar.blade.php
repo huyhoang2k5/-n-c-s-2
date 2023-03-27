@@ -4,12 +4,10 @@
             <a href="{{ route('dashboard') }}" class="logo-link">
                 <div class="logo-wrap">Kho</div>
             </a>
-            <div class="nk-compact-toggle me-n1"><button
-                    class="btn btn-md btn-icon text-light btn-no-hover compact-toggle"><em
+            <div class="nk-compact-toggle me-n1"><button class="btn btn-md btn-icon text-light btn-no-hover compact-toggle"><em
                         class="icon off ni ni-chevrons-left"></em><em class="icon on ni ni-chevrons-right"></em></button>
             </div>
-            <div class="nk-sidebar-toggle me-n1"><button
-                    class="btn btn-md btn-icon text-light btn-no-hover sidebar-toggle"><em
+            <div class="nk-sidebar-toggle me-n1"><button class="btn btn-md btn-icon text-light btn-no-hover sidebar-toggle"><em
                         class="icon ni ni-arrow-left"></em></button></div>
         </div>
     </div>
@@ -26,39 +24,67 @@
                         </a>
                     </li>
                     @auth
-                        <li class="{{ request()->is('kho-hang*') ? 'active' : '' }}">
+                        <li class="{{ request()->is('hang-hoa*') ? 'active' : '' }}">
                             <a href="{{ route('hang-hoa.index') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon">
                                     <em class="icon ni ni-package"></em>
-                                </span><span class="nk-menu-text">Quản lý kho</span>
+                                </span><span class="nk-menu-text">Quản lý hàng hóa</span>
                             </a>
                         </li>
 
-                        <li class="{{ request()->is('loai-hang*') ? 'active' : '' }}"><a
-                                href="{{ route('loai-hang.index') }}" class="nk-menu-link"><span class="nk-menu-icon"><em
-                                        class="icon ni ni-layers"></em></span><span class="nk-menu-text">Quản lý loại hàng
-                                    hóa</span></a></li>
+                        <li class="{{ request()->is('loai-hang*') ? 'active' : '' }}">
+                            <a href="{{ route('loai-hang.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-layers"></em>
+                                </span>
+                                <span class="nk-menu-text">Quản lý loại hàng hóa</span>
+                            </a>
+                        </li>
 
-                        <li class="{{ request()->is('nhap-kho*') ? 'active' : '' }}"><a
-                                href="{{ route('nhap-kho.index') }}" class="nk-menu-link"><span class="nk-menu-icon"><em
-                                        class="icon ni ni-archive"></em></span><span class="nk-menu-text">Quản lý nhập
-                                    kho</span></a></li>
+                        <li class="{{ request()->is('nhap-kho*') ? 'active' : '' }}">
+                            <a href="{{ route('nhap-kho.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-archive"></em>
+                                </span>
+                                <span class="nk-menu-text">Quản lý nhập kho</span>
+                            </a>
+                        </li>
 
-                        <li class="nk-menu-item"><a href="apps/pricing/pricing.html" class="nk-menu-link"><span
-                                    class="nk-menu-icon"><em class="icon ni ni-unarchive"></em></span><span
-                                    class="nk-menu-text">Quản lý xuất kho</span></a></li>
+                        <li class="{{ request()->is('xuat-kho*') ? 'active' : '' }}">
+                            <a href="{{ route('xuat-kho.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-unarchive"></em>
+                                </span>
+                                <span class="nk-menu-text">Quản lý xuất kho</span>
+                            </a>
+                        </li>
 
-                        <li class="{{ request()->is('nha-cung-cap*') ? 'active' : '' }}"><a href="{{ route('nha-cung-cap.index') }}" class="nk-menu-link"><span
-                                    class="nk-menu-icon"><em class="icon ni ni-building"></em></span><span
-                                    class="nk-menu-text">Quản lý nhà cung cấp</span></a></li>
+                        <li class="{{ request()->is('nha-cung-cap*') ? 'active' : '' }}">
+                            <a href="{{ route('nha-cung-cap.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-building"></em>
+                                </span>
+                                <span class="nk-menu-text">Quản lý nhà cung cấp</span>
+                            </a>
+                        </li>
 
-                        <li class="nk-menu-item"><a href="apps/todo/todo.html" class="nk-menu-link"><span
-                                    class="nk-menu-icon"><em class="icon ni ni-todo"></em></span><span
-                                    class="nk-menu-text">Thống kê</span></a></li>
+                        <li class="nk-menu-item">
+                            <a href="apps/todo/todo.html" class="nk-menu-link">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-todo"></em>
+                                </span>
+                                <span class="nk-menu-text">Thống kê</span>
+                            </a>
+                        </li>
 
-                        <li class="nk-menu-item"><a href="apps/todo/todo.html" class="nk-menu-link"><span
-                                    class="nk-menu-icon"><em class="icon ni ni-users"></em></span><span
-                                    class="nk-menu-text">Quản lý tài khoản</span></a></li>
+                        <li class="nk-menu-item">
+                            <a href="apps/todo/todo.html" class="nk-menu-link">
+                                <span class="nk-menu-icon">
+                                    <em class="icon ni ni-users"></em>
+                                </span>
+                                <span class="nk-menu-text">Quản lý tài khoản</span>
+                            </a>
+                        </li>
                     @endauth
                 </ul>
             </div>

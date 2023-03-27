@@ -53,7 +53,7 @@ class LoaiHangController extends Controller
         ],
         [
             'ten_loai_hang' => $data['ten_loai_hang'],
-            'trang_thai' => $data['trang_thai'] ?? 3,
+            'id_trang_thai' => $data['id_trang_thai'] ?? 3,
             'mo_ta' => $mo_ta
         ]);
 
@@ -103,8 +103,8 @@ class LoaiHangController extends Controller
         $loai_hang = LoaiHang::findOrFail($id);
         $status = $loai_hang->update([
             'ten_loai_hang' => $data['ten_loai_hang'],
-            'trang_thai' => $data['trang_thai'],
-            'mo_ta' => $data['mo_ta']
+            'id_trang_thai' => $data['id_trang_thai'],
+            'mo_ta' => $mo_ta
         ]);
 
         if ($status) {

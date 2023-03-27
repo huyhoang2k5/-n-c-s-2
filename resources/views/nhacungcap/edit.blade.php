@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="nk-block">
-                        <form action="{{ route('nha-cung-cap.update', $nha_cung_cap->id) }}" method="post"
+                        <form action="{{ route('nha-cung-cap.update', $nha_cung_cap->ma_ncc) }}" method="post"
                             enctype="multipart/form-data" id="form-edit">
                             @csrf
                             @method('put')
@@ -31,7 +31,7 @@
                                             <div class="card card-gutter-md">
                                                 <div class="card-body">
                                                     <div class="row g-gs">
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div class="form-group"><label for="ten_ncc"
                                                                     class="form-label">Tên nhà cung cấp</label>
                                                                 <div class="form-control-wrap"><input type="text"
@@ -67,13 +67,28 @@
                                                                 <div class="form-control-wrap"><input type="text"
                                                                         class="form-control" id="sdt"
                                                                         name="sdt"
-                                                                        value="{{ $nha_cung_cap->sdt }}"
+                                                                        value="0{{ $nha_cung_cap->sdt }}"
                                                                         placeholder="Số điện thoại" required>
                                                                 </div>
                                                                 @if ($errors)
                                                                     <span
                                                                         class="text-danger py-1 mt-2">{{ $errors->first('sdt') }}</span>
                                                                 @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group"><label class="form-label">Trạng
+                                                                    thái</label>
+                                                                <div class="form-control-wrap">
+                                                                    <select class="js-select" name="id_trang_thai"
+                                                                        data-search="true" data-sort="false">
+                                                                        <option value="">Select an option</option>
+                                                                        @foreach ($trang_thai as $tt)
+                                                                            <option value="{{ $tt->id }}"
+                                                                                {{ $nha_cung_cap->id_trang_thai == $tt->id ? 'selected' : '' }}>{{ $tt->ten_trang_thai }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">

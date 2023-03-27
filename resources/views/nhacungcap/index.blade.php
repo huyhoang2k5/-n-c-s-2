@@ -38,10 +38,10 @@
                             <table class="datatable-init table" data-nk-container="table-responsive">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="tb-col tb-col-md"><span class="overline-title">Mã nhà cung cấp</span>
+                                        <th class="tb-col"><span class="overline-title">Mã nhà cung cấp</span>
                                         </th>
                                         <th class="tb-col"><span class="overline-title">Tên nhà cung cấp</span></th>
-                                        <th class="tb-col tb-col-md"><span class="overline-title">Trạng thái</span></th>
+                                        <th class="tb-col"><span class="overline-title">Trạng thái</span></th>
                                         <th class="tb-col tb-col-end" data-sortable="false"><span
                                                 class="overline-title">action</span></th>
                                     </tr>
@@ -49,13 +49,13 @@
                                 <tbody>
                                     @foreach ($nha_cung_cap as $ncc)
                                         <tr>
-                                            <td class="tb-col tb-col-md"><span>#{{ $ncc->ma_ncc }}</span></td>
+                                            <td class="tb-col"><span>#{{ $ncc->ma_ncc }}</span></td>
                                             <td class="tb-col">
-                                                <div class="media-text"><a href="{{ route('nha-cung-cap.edit', $ncc->id) }}"
+                                                <div class="media-text"><a href="{{ route('nha-cung-cap.show', $ncc->ma_ncc) }}"
                                                         class="title">{{ $ncc->ten_ncc }}</a></div>
                                             </td>
-                                            <td class="tb-col tb-col-md"><span
-                                                class="badge text-bg-{{ $ncc->trang_thai == 3 ? 'success' : ($ncc->trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $ncc->getTrangThai->ten_trang_thai }}</span></td>
+                                            <td class="tb-col"><span
+                                                class="badge text-bg-{{ $ncc->id_trang_thai == 3 ? 'success' : ($ncc->id_trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $ncc->getTrangThai->ten_trang_thai }}</span></td>
                                             <td class="tb-col tb-col-end">
                                                 <div class="dropdown"><a href="#"
                                                         class="btn btn-sm btn-icon btn-zoom me-n1"
@@ -63,10 +63,10 @@
                                                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-end">
                                                         <div class="dropdown-content py-1">
                                                             <ul class="link-list link-list-hover-bg-primary link-list-md">
-                                                                <li><a href="{{ route('nha-cung-cap.edit', $ncc->id) }}"><em
+                                                                <li><a href="{{ route('nha-cung-cap.edit', $ncc->ma_ncc) }}"><em
                                                                             class="icon ni ni-edit"></em><span>Sửa</span></a>
                                                                 </li>
-                                                                <li><a href="products.html"><em
+                                                                <li><a href="{{ route('nha-cung-cap.show', $ncc->ma_ncc) }}"><em
                                                                             class="icon ni ni-eye"></em><span>Xem chi
                                                                             tiết</span></a></li>
                                                             </ul>

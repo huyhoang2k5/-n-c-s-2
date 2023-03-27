@@ -6,16 +6,17 @@ use App\Models\ChiTietHangHoa;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Contracts\Validation\Validator;
 
-
-class ChiTietHangHoaImport implements ToModel, WithChunkReading, WithHeadingRow
+class ChiTietHangHoaImport implements ToModel, WithChunkReading, WithHeadingRow, WithValidation
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    private $ma_phieu_nhap, $trang_thai;
+    private $ma_phieu_nhap, $trang_thai, $ma_ncc;
 
 
     public function setMaPhieu($ma_phieu_nhap)
@@ -30,6 +31,12 @@ class ChiTietHangHoaImport implements ToModel, WithChunkReading, WithHeadingRow
     }
     ///////////////////////////////////////////////////////////
 
+    public function setNhaCungCap($ma_ncc)
+    {
+        $this->ma_ncc = $ma_ncc;
+    }
+    ///////////////////////////////////////////////////////////
+
     public function headingRow() : int
     {
         return 1;
@@ -40,13 +47,15 @@ class ChiTietHangHoaImport implements ToModel, WithChunkReading, WithHeadingRow
     {
         $row['ma_phieu_nhap'] = $this->ma_phieu_nhap;
         $row['trang_thai'] = $this->trang_thai;
+        $row['ma_ncc'] = $this->ma_ncc;
 
         return new ChiTietHangHoa([
             'ma_phieu_nhap' => $row['ma_phieu_nhap'],
             'ma_hang_hoa' => $row['ma_hang_hoa'],
-            'ma_ncc' => $row['ma_nha_cung_cap'],
+            'ma_ncc' => $row['ma_ncc'],
             'so_luong' => $row['so_luong'],
             'so_luong_goc' => $row['so_luong'],
+            'trang_thai' => $row['trang_thai'],
             'gia_nhap' => $row['gia_nhap'],
             'ngay_san_xuat' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['ngay_san_xuat'])->format('Y-m-d'),
             'tg_bao_quan' => $row['thoi_gian_bao_quan']
@@ -56,20 +65,16 @@ class ChiTietHangHoaImport implements ToModel, WithChunkReading, WithHeadingRow
     public function rules(): array
     {
         return [
-            '*.ma_phieu_nhap' => 'required|string|max:30',
-            '*.ma_hang_hoa' => 'required|string|max:30',
-            '*.ma_ncc' => 'required|string|max:30',
-            '*.so_luong' => 'required|integer|min:0',
-            '*.so_luong_goc' => 'required|integer|min:0',
-            '*.gia_nhap' => 'required|integer|min:0',
-            '*.ngay_san_xuat' => 'date_format:Y/m/d',
-            '*.tg_bao_quan' => 'required|integer|min:0',
+            '*.ma_hang_hoa' => 'required|string|max:50',
+            '*.so_luong' => 'required|integer',
+            '*.gia_nhap' => 'required|integer',
+            '*.thoi_gian_bao_quan' => 'required|integer',
         ];
     }
 
     public function chunkSize(): int
     {
-        return 200;
+        return 100;
     }
 
     public function getErrors(): array

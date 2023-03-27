@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('hang_hoa', function (Blueprint $table) {
             $table->id();
-            $table->string('ma_hang_hoa');
+            $table->char('ma_hang_hoa');
             $table->string('ten_hang_hoa');
-            $table->string('mo_ta')->nullable()->default('Mặt hàng này chưa có mô tả cụ thể.');
+            $table->text('mo_ta')->nullable();
             $table->foreignId('id_loai_hang')->constrained('loai_hang')->cascadeOnDelete();
             $table->string('don_vi_tinh');
-            $table->string('barcode')->nullable();
-            $table->string('img')->nullable()->default('hang_hoa.jpg');
+            $table->integer('barcode')->nullable();
+            $table->char('img')->nullable();
             $table->timestamps();
         });
     }

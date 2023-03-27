@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('nha_cung_cap', function (Blueprint $table) {
             $table->id();
-            $table->string('ma_ncc');
+            $table->char('ma_ncc');
             $table->string('ten_ncc');
-            $table->integer('trang_thai')->default(3);
-            $table->string('dia_chi')->nullable();
+            $table->string('email')->nullable();
+            $table->integer('id_trang_thai')->default(3);
+            $table->text('dia_chi')->nullable();
             $table->integer('sdt')->nullable();
-            $table->string('mo_ta')->nullable();
+            $table->text('mo_ta')->nullable();
             $table->timestamps();
         });
     }

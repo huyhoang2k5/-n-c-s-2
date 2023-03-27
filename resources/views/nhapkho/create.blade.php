@@ -36,35 +36,40 @@
                                                 <div class="card-body">
                                                     <div class="row g-gs">
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"><label for="ma_phieu_nhap"
-                                                                    class="form-label">Mã phiếu nhập</label>
+                                                            <div class="form-group"><label for="ma_phieu_nhap" class="form-label">Mã phiếu nhập</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" minlength="1" maxlength="255"
-                                                                        class="form-control" id="ma_phieu_nhap"
-                                                                        value="#{{ $ma_phieu_nhap }}" disabled>
+                                                                    <input style="width:100%" type="text" minlength="1" maxlength="255" class="form-control"
+                                                                        id="ma_phieu_nhap" value="{{ $ma_phieu_nhap }}" disabled>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"> <label for="ngay_nhap"
-                                                                    class="form-label">Ngày nhập kho</label>
-                                                                <div class="form-control-wrap"> <input
-                                                                        placeholder="yyyy/mm/dd" type="date"
-                                                                        class="form-control" name="ngay_nhap"
-                                                                        value="{{ old('ngay_nhap') }}" id="ngay_nhap"
+                                                            <div class="form-group"> <label for="ngay_nhap" class="form-label">Ngày nhập kho</label>
+                                                                <div class="form-control-wrap"> <input style="width:100%" placeholder="yyyy/mm/dd" type="date"
+                                                                        class="form-control" name="ngay_nhap" value="{{ old('ngay_nhap') }}" id="ngay_nhap"
                                                                         required> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group"> <label for="ma_ncc" class="form-label">Nhà cung cấp</label>
+                                                                <div class="form-control-wrap">
+                                                                    <select class="js-select" data-search="true" data-sort="false" name="ma_ncc" id="ma_ncc">
+                                                                        <option value="">Nhà cung cấp</option>
+                                                                        @foreach ($nha_cung_cap as $ncc)
+                                                                            <option value="{{ $ncc->ma_ncc }}">{{ $ncc->ten_ncc }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
                                                                 <label class="form-label">Chi tiết</label>
                                                                 <div class="form-control-wrap">
-                                                                    <div class="js-quill" id="quill_editor"
-                                                                        value="{!! old('mo_ta') !!}"
-                                                                        data-toolbar="minimal"
+                                                                    <div class="js-quill" id="quill_editor" value="{!! old('mo_ta') !!}" data-toolbar="minimal"
                                                                         data-placeholder="Viết chi tiết sản phẩm vào đây...">
                                                                     </div>
-                                                                    <input type="hidden" name="mo_ta">
+                                                                    <input style="width:100%" type="hidden" name="mo_ta">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -77,122 +82,88 @@
                                                 <table id="item-table" class="table" data-nk-container="table-responsive">
                                                     <thead class="table-light">
                                                         <tr>
-                                                            <th class="tb-col"><span class="overline-title">Mã hàng
-                                                                    hóa</span></th>
-                                                            <th class="tb-col"><span class="overline-title">Mã nhà cung
-                                                                    cấp</span></th>
-                                                            <th class="tb-col"><span class="overline-title">Số lượng</span>
+                                                            <th class="tb-col"><span class="overline-title">Mã - tên hàng</span></th>
+                                                            <th class="tb-col"><span class="overline-title">SL</span>
                                                             </th>
-                                                            <th class="tb-col"><span class="overline-title">Giá
-                                                                    nhập(vnđ)</span></th>
-                                                            <th class="tb-col"><span class="overline-title">Ngày sản
-                                                                    xuất</span></th>
+                                                            <th class="tb-col"><span class="overline-title">Giá</span></th>
+                                                            <th class="tb-col"><span class="overline-title">NSX</span></th>
                                                             <th class="tb-col"><span class="overline-title">Bảo
                                                                     quản(tháng)</span></th>
-                                                            <th class="tb-col tb-col-end"><span
-                                                                    class="overline-title">Action</span></th>
+                                                            <th class="tb-col tb-col-end"><span class="overline-title">Hành động</span></th>
                                                         </tr>
                                                     </thead>
+
+                                                    <datalist id="ma_hang_hoa">
+                                                        @foreach ($hang_hoa as $hang)
+                                                            <option value="{{ $hang->ma_hang_hoa }}">{{ $hang->ten_hang_hoa }}</option>
+                                                        @endforeach
+                                                    </datalist>
+
                                                     <tbody id="tb-container">
                                                         <tr class="item-row">
                                                             <td class="tb-col">
                                                                 <div class="form-control-wrap">
-                                                                    {{-- <input type="text" minlength="1" maxlength="255"
-                                                                        class="form-control" name="ma_hang_hoa[]"
-                                                                        required /> --}}
-                                                                    <input list="ma_hang_hoa" name="ma_hang_hoa[]"
-                                                                        class="form-control">
-                                                                    <datalist id="ma_hang_hoa">
-                                                                        @foreach ($hang_hoa as $hang)
-                                                                            <option value="{{ $hang->ma_hang_hoa }}"></option>
-                                                                        @endforeach
-                                                                    </datalist>
+                                                                    <input style="width:100%" list="ma_hang_hoa" name="ma_hang_hoa[]" class="form-control"
+                                                                        required>
                                                                 </div>
                                                             </td>
                                                             <td class="tb-col">
-                                                                <div class="form-control-wrap"><input type="text"
-                                                                        minlength="1" maxlength="255" class="form-control"
-                                                                        name="ma_ncc[]" required />
+                                                                <div class="form-control-wrap"><input style="width:100%" type="number" min="1"
+                                                                        max="1000000000" class="form-control" name="so_luong[]" required />
                                                                 </div>
                                                             </td>
                                                             <td class="tb-col">
-                                                                <div class="form-control-wrap"><input type="number"
-                                                                        min="1" max="1000000000"
-                                                                        class="form-control" name="so_luong[]" required />
+                                                                <div class="form-control-wrap"><input style="width:100%" type="number" min="1"
+                                                                        max="1000000000" class="form-control" name="gia_nhap[]" required />
                                                                 </div>
                                                             </td>
                                                             <td class="tb-col">
-                                                                <div class="form-control-wrap"><input type="number"
-                                                                        min="1" max="1000000000"
-                                                                        class="form-control" name="gia_nhap[]" required />
+                                                                <div class="form-control-wrap"><input style="width:100%" placeholder="dd/mm/yyyy" type="date"
+                                                                        class="form-control" name="ngay_san_xuat[]" value="{{ old('ngay_san_xuat[]') }}"
+                                                                        required>
                                                                 </div>
                                                             </td>
                                                             <td class="tb-col">
-                                                                <div class="form-control-wrap"><input
-                                                                        placeholder="dd/mm/yyyy" type="date"
-                                                                        class="form-control" name="ngay_san_xuat[]"
-                                                                        value="{{ old('ngay_san_xuat[]') }}" required>
-                                                                </div>
-                                                            </td>
-                                                            <td class="tb-col">
-                                                                <div class="form-control-wrap"><input type="number"
-                                                                        min="1" max="1000000000"
-                                                                        class="form-control" name="tg_bao_quan[]"
-                                                                        required /></div>
+                                                                <div class="form-control-wrap"><input style="width:100%" type="number" min="1"
+                                                                        max="1000000000" class="form-control" name="tg_bao_quan[]" required /></div>
                                                             </td>
                                                             <td class="tb-col tb-col-end"><button type="button"
-                                                                    class="btn btn-danger btn-sm remove-item">Remove</button>
+                                                                    class="btn btn-danger btn-sm remove-item">Xóa</button>
                                                             </td>
                                                         </tr>
                                                         <template id="hang-hoa-template">
                                                             <tr class="item-row">
                                                                 <td class="tb-col">
-                                                                    <div class="form-control-wrap"><input type="text"
-                                                                            minlength="1" maxlength="255"
-                                                                            class="form-control" name="ma_hang_hoa[]"
-                                                                            required /></div>
-                                                                </td>
-                                                                <td class="tb-col">
-                                                                    <div class="form-control-wrap"><input type="text"
-                                                                            minlength="1" maxlength="255"
-                                                                            class="form-control" name="ma_ncc[]"
-                                                                            required />
+                                                                    <div class="form-control-wrap">
+                                                                        <input style="width:100%" list="ma_hang_hoa" name="ma_hang_hoa[]" class="form-control">
                                                                     </div>
                                                                 </td>
                                                                 <td class="tb-col">
-                                                                    <div class="form-control-wrap"><input type="number"
-                                                                            min="1" max="1000000000"
-                                                                            class="form-control" name="so_luong[]"
-                                                                            required /></div>
+                                                                    <div class="form-control-wrap"><input style="width:100%" type="number" min="1"
+                                                                            max="1000000000" class="form-control" name="so_luong[]" required /></div>
                                                                 </td>
                                                                 <td class="tb-col">
-                                                                    <div class="form-control-wrap"><input type="number"
-                                                                            min="1" max="1000000000"
-                                                                            class="form-control" name="gia_nhap[]"
-                                                                            required /></div>
+                                                                    <div class="form-control-wrap"><input style="width:100%" type="number" min="1"
+                                                                            max="1000000000" class="form-control" name="gia_nhap[]" required /></div>
                                                                 </td>
                                                                 <td class="tb-col">
-                                                                    <div class="form-control-wrap"><input
-                                                                            placeholder="dd/mm/yyyy" type="date"
-                                                                            class="form-control" name="ngay_san_xuat[]"
+                                                                    <div class="form-control-wrap"><input style="width:100%" placeholder="dd/mm/yyyy"
+                                                                            type="date" class="form-control" name="ngay_san_xuat[]"
                                                                             value="{{ old('ngay_san_xuat[]') }}" required>
                                                                     </div>
                                                                 </td>
                                                                 <td class="tb-col">
-                                                                    <div class="form-control-wrap"><input type="number"
-                                                                            min="1" max="1000000000"
-                                                                            class="form-control" name="tg_bao_quan[]"
-                                                                            required /></div>
+                                                                    <div class="form-control-wrap"><input style="width:100%" type="number" min="1"
+                                                                            max="1000000000" class="form-control" name="tg_bao_quan[]" required /></div>
                                                                 </td>
                                                                 <td class="tb-col tb-col-end"><button type="button"
-                                                                        class="btn btn-danger btn-sm remove-item">Remove</button>
+                                                                        class="btn btn-danger btn-sm remove-item">Xóa</button>
                                                                 </td>
                                                             </tr>
                                                         </template>
                                                     </tbody>
                                                 </table>
-                                                <button type="button" class="btn btn-primary btn-sm" id="add-item">Add
-                                                    Item</button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="add-item">Thêm</button>
                                             </div>
                                         </div>
                                         <div class="gap-col">
@@ -218,16 +189,15 @@
 
 @section('script')
     <script src="{{ asset('assets/js/libs/editors/quill.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('.js-select-mhh').select2();
-        });
-
-
         const addItemBtn = document.getElementById('add-item')
         const container = document.getElementById('tb-container')
+
+        const delBtn = document.querySelector('.remove-item')
+        delBtn.addEventListener('click', function() {
+            delBtn.closest('.item-row').remove()
+        })
 
         addItemBtn.addEventListener('click', function() {
             const hangHoaTemplate = document.getElementById('hang-hoa-template')
@@ -256,12 +226,14 @@
             e.preventDefault()
             const ma_phieu_nhap = $('input[name="ma_phieu_nhap"]').val()
             const ngay_nhap = $('input[name="ngay_nhap"]').val()
+            const ma_ncc = $('#ma_ncc').find(':selected').val()
             const mo_ta = quill.getContents().ops[0].insert
 
             id_user = {{ auth()->user()->id }}
 
             let data = [{
                 ma_phieu_nhap: ma_phieu_nhap,
+                ma_ncc: ma_ncc,
                 ngay_nhap: ngay_nhap,
                 mo_ta: mo_ta === "\n" ? '' : mo_ta,
                 id_user: id_user
@@ -270,7 +242,6 @@
             $('table tr.item-row').each(function() {
                 const item = {
                     ma_hang_hoa: $(this).find('input[name="ma_hang_hoa[]"]').val(),
-                    ma_ncc: $(this).find('input[name="ma_ncc[]"]').val(),
                     so_luong: $(this).find('input[name="so_luong[]"]').val(),
                     gia_nhap: $(this).find('input[name="gia_nhap[]"]').val(),
                     ngay_san_xuat: $(this).find('input[name="ngay_san_xuat[]"]').val(),
@@ -278,8 +249,6 @@
                 }
                 data.push(item);
             });
-
-            console.log(data);
 
             const token = '{{ csrf_token() }}'
             const apiUrl = '{{ route('api.nhap-kho.store') }}'
@@ -293,17 +262,24 @@
                 },
                 data: JSON.stringify(data),
                 success: function(response) {
-                    console.log(response);
                     if (response.type === 'success') {
-                        window.location.href = response.redirect;
+                        swal({
+                            title: 'Thành công!',
+                            text: response.message,
+                            icon: 'success'
+                        });
+                        setTimeout(() => {
+                            window.location.href = response.redirect;
+                        }, 3000);
                     } else {
-                        // handle error
+                        swal({
+                            title: 'Thất bại!',
+                            text: response.message,
+                            icon: 'error'
+                        });
                     }
                 },
-                error: function(xhr, status, error) {
-                    console.log(status)
-                    console.log(error);
-                }
+                error: function(xhr, status, error) {}
             });
 
             return true

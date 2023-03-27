@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('chi_tiet_phieu_xuat', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_phieu_xuat')->constrained('phieu_xuat')->cascadeOnDelete();
+            $table->char('ma_phieu_xuat');
             $table->foreignId('id_chi_tiet_hang_hoa')->nullable()->constrained('chi_tiet_hang_hoa')->nullOnDelete();
             $table->integer('so_luong')->unsigned();
+            $table->integer('gia_xuat')->unsigned();
             $table->timestamps();
         });
     }

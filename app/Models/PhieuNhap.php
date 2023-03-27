@@ -13,13 +13,13 @@ class PhieuNhap extends Model
 
     protected $guarded = ['id'];
 
-    public function getChiTietHangHoa()
-    {
-        return $this->hasOne(ChiTietHangHoa::class, 'ma_phieu_nhap', 'ma_phieu_nhap');
-    }
-
     public function getUsers()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function getNhaCungCap()
+    {
+        return $this->belongsTo(NhaCungCap::class, 'ma_ncc', 'ma_ncc');
     }
 }

@@ -13,27 +13,28 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
+        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
-        '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '265b4faa2b3a9766332744949e83bf97' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/helpers.php',
         'c7a3c339e7e14b60e06a2d7fcce9476b' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Events/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         'a1cfe24d14977df6878b9bf804af2d1c' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
+        '6b34c85f7b1ad6faa15aa12109e030f2' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/functions.php',
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
     );
 
@@ -93,6 +94,7 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         ),
         'R' => 
         array (
+            'RealRashid\\SweetAlert\\' => 22,
             'Ramsey\\Uuid\\' => 12,
             'Ramsey\\Collection\\' => 18,
         ),
@@ -131,6 +133,10 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
             'Laravel\\SerializableClosure\\' => 28,
             'Laravel\\Sanctum\\' => 16,
             'Laravel\\Sail\\' => 13,
+        ),
+        'J' => 
+        array (
+            'JnJairo\\Laravel\\Ngrok\\' => 22,
         ),
         'I' => 
         array (
@@ -335,6 +341,10 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         array (
             0 => __DIR__ . '/..' . '/spatie/backtrace/src',
         ),
+        'RealRashid\\SweetAlert\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/realrashid/sweet-alert/src',
+        ),
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
@@ -439,6 +449,10 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         'Laravel\\Sail\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/sail/src',
+        ),
+        'JnJairo\\Laravel\\Ngrok\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jn-jairo/laravel-ngrok/src',
         ),
         'Illuminate\\Support\\' => 
         array (
@@ -563,6 +577,8 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\Api\\PhieuNhapController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PhieuNhapController.php',
+        'App\\Http\\Controllers\\Api\\PhieuXuatController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PhieuXuatController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
@@ -575,7 +591,9 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\LoaiHangController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoaiHangController.php',
         'App\\Http\\Controllers\\NhaCungCapController' => __DIR__ . '/../..' . '/app/Http/Controllers/NhaCungCapController.php',
-        'App\\Http\\Controllers\\NhapKhoController' => __DIR__ . '/../..' . '/app/Http/Controllers/NhapKhoController.php',
+        'App\\Http\\Controllers\\PhieuNhapController' => __DIR__ . '/../..' . '/app/Http/Controllers/PhieuNhapController.php',
+        'App\\Http\\Controllers\\PhieuXuatController' => __DIR__ . '/../..' . '/app/Http/Controllers/PhieuXuatController.php',
+        'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -586,13 +604,19 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
-        'App\\Http\\Requests\\LoaiHangRequest' => __DIR__ . '/../..' . '/app/Http/Requests/LoaiHangRequest.php',
+        'App\\Http\\Requests\\ExcelRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ExcelRequest.php',
+        'App\\Http\\Requests\\HangHoaStoreRequest' => __DIR__ . '/../..' . '/app/Http/Requests/HangHoaStoreRequest.php',
+        'App\\Http\\Requests\\HangHoaUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/HangHoaUpdateRequest.php',
+        'App\\Http\\Requests\\LoaiHangStoreRequest' => __DIR__ . '/../..' . '/app/Http/Requests/LoaiHangStoreRequest.php',
+        'App\\Http\\Requests\\LoaiHangUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/LoaiHangUpdateRequest.php',
         'App\\Imports\\ChiTietHangHoaImport' => __DIR__ . '/../..' . '/app/Imports/ChiTietHangHoaImport.php',
         'App\\Models\\ChiTietHangHoa' => __DIR__ . '/../..' . '/app/Models/ChiTietHangHoa.php',
+        'App\\Models\\ChiTietPhieuXuat' => __DIR__ . '/../..' . '/app/Models/ChiTietPhieuXuat.php',
         'App\\Models\\HangHoa' => __DIR__ . '/../..' . '/app/Models/HangHoa.php',
         'App\\Models\\LoaiHang' => __DIR__ . '/../..' . '/app/Models/LoaiHang.php',
         'App\\Models\\NhaCungCap' => __DIR__ . '/../..' . '/app/Models/NhaCungCap.php',
-        'App\\Models\\NhapKho' => __DIR__ . '/../..' . '/app/Models/NhapKho.php',
+        'App\\Models\\PhieuNhap' => __DIR__ . '/../..' . '/app/Models/PhieuNhap.php',
+        'App\\Models\\PhieuXuat' => __DIR__ . '/../..' . '/app/Models/PhieuXuat.php',
         'App\\Models\\TrangThai' => __DIR__ . '/../..' . '/app/Models/TrangThai.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
@@ -726,8 +750,12 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         'Cron\\HoursField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/HoursField.php',
         'Cron\\MinutesField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
         'Cron\\MonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
+        'Database\\Factories\\HangHoaFactory' => __DIR__ . '/../..' . '/database/factories/HangHoaFactory.php',
+        'Database\\Factories\\LoaiHangFactory' => __DIR__ . '/../..' . '/database/factories/LoaiHangFactory.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
+        'Database\\Seeders\\HangHoaTableSeeder' => __DIR__ . '/../..' . '/database/seeders/HangHoaTableSeeder.php',
+        'Database\\Seeders\\LoaiHangTableSeeder' => __DIR__ . '/../..' . '/database/seeders/LoaiHangTableSeeder.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
         'DeepCopy\\Exception\\PropertyException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/PropertyException.php',
@@ -3014,6 +3042,10 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         'Illuminate\\View\\ViewFinderInterface' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewFinderInterface.php',
         'Illuminate\\View\\ViewName' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewName.php',
         'Illuminate\\View\\ViewServiceProvider' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/View/ViewServiceProvider.php',
+        'JnJairo\\Laravel\\Ngrok\\NgrokCommand' => __DIR__ . '/..' . '/jn-jairo/laravel-ngrok/src/NgrokCommand.php',
+        'JnJairo\\Laravel\\Ngrok\\NgrokProcessBuilder' => __DIR__ . '/..' . '/jn-jairo/laravel-ngrok/src/NgrokProcessBuilder.php',
+        'JnJairo\\Laravel\\Ngrok\\NgrokServiceProvider' => __DIR__ . '/..' . '/jn-jairo/laravel-ngrok/src/NgrokServiceProvider.php',
+        'JnJairo\\Laravel\\Ngrok\\NgrokWebService' => __DIR__ . '/..' . '/jn-jairo/laravel-ngrok/src/NgrokWebService.php',
         'Laravel\\Sail\\Console\\AddCommand' => __DIR__ . '/..' . '/laravel/sail/src/Console/AddCommand.php',
         'Laravel\\Sail\\Console\\Concerns\\InteractsWithDockerComposeServices' => __DIR__ . '/..' . '/laravel/sail/src/Console/Concerns/InteractsWithDockerComposeServices.php',
         'Laravel\\Sail\\Console\\InstallCommand' => __DIR__ . '/..' . '/laravel/sail/src/Console/InstallCommand.php',
@@ -5881,6 +5913,13 @@ class ComposerStaticInit26c050885eaad6d3672306812f7af9a0
         'Ramsey\\Uuid\\UuidInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/UuidInterface.php',
         'Ramsey\\Uuid\\Validator\\GenericValidator' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/GenericValidator.php',
         'Ramsey\\Uuid\\Validator\\ValidatorInterface' => __DIR__ . '/..' . '/ramsey/uuid/src/Validator/ValidatorInterface.php',
+        'RealRashid\\SweetAlert\\Console\\PublishCommand' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/Console/PublishCommand.php',
+        'RealRashid\\SweetAlert\\Facades\\Alert' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/Facades/Alert.php',
+        'RealRashid\\SweetAlert\\Storage\\AlertSessionStore' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/Storage/AlertSessionStore.php',
+        'RealRashid\\SweetAlert\\Storage\\SessionStore' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/Storage/SessionStore.php',
+        'RealRashid\\SweetAlert\\SweetAlertServiceProvider' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/SweetAlertServiceProvider.php',
+        'RealRashid\\SweetAlert\\ToSweetAlert' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/ToSweetAlert.php',
+        'RealRashid\\SweetAlert\\Toaster' => __DIR__ . '/..' . '/realrashid/sweet-alert/src/Toaster.php',
         'SebastianBergmann\\CliParser\\AmbiguousOptionException' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/AmbiguousOptionException.php',
         'SebastianBergmann\\CliParser\\Exception' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/Exception.php',
         'SebastianBergmann\\CliParser\\OptionDoesNotAllowArgumentException' => __DIR__ . '/..' . '/sebastian/cli-parser/src/exceptions/OptionDoesNotAllowArgumentException.php',

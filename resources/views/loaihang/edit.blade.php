@@ -51,12 +51,12 @@
                                                             <div class="form-group"><label class="form-label">Trạng
                                                                     thái</label>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="js-select" name="trang_thai"
+                                                                    <select class="js-select" name="id_trang_thai"
                                                                         data-search="true" data-sort="false">
                                                                         <option value="">Select an option</option>
                                                                         @foreach ($trang_thai as $tt)
                                                                             <option value="{{ $tt->id }}"
-                                                                                {{ $loai_hang->trang_thai == $tt->id ? 'selected' : '' }}>{{ $tt->ten_trang_thai }}</option>
+                                                                                {{ $loai_hang->id_trang_thai == $tt->id ? 'selected' : '' }}>{{ $tt->ten_trang_thai }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>

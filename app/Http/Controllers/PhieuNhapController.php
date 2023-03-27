@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PhieuNhap;
 use App\Models\ChiTietHangHoa;
 use App\Models\HangHoa;
+use App\Models\NhaCungCap;
 use Illuminate\Http\Request;
 use App\Http\Requests\ExcelRequest;
 use App\Imports\ChiTietHangHoaImport;
@@ -20,19 +21,14 @@ class PhieuNhapController extends Controller
      */
     public function index()
     {
-        //Lay ma phieu nhap Excel
-        $ma_phieu_nhap = PhieuNhap::latest()->first()->ma_phieu_nhap;
+        $nha_cung_cap = NhaCungCap::get();
+        $ma_phieu_nhap = PhieuNhap::latest()->first()->ma_phieu_nhap ?? "PN000000";
 
-        if (!$ma_phieu_nhap) {
-            $ma_phieu_nhap = "PN000000";
-        } else {
-            $lastNumber = (int) substr($ma_phieu_nhap, 2);
-            $lastNumberLength = strlen((string)substr($ma_phieu_nhap, 2));
-            $nextNumber = $lastNumber + 1;
-            $ma_phieu_nhap = 'PN' . str_pad($nextNumber, $lastNumberLength, '0', STR_PAD_LEFT);
-        }
+        $lastNumber = (int) substr($ma_phieu_nhap, 2);
+        $lastNumberLength = strlen((string)substr($ma_phieu_nhap, 2));
+        $nextNumber = $lastNumber + 1;
+        $ma_phieu_nhap = 'PN' . str_pad($nextNumber, $lastNumberLength, '0', STR_PAD_LEFT);
 
-        //Danh sach phieu nhap
         $phieu_nhap = [];
 
         PhieuNhap::orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$phieu_nhap) {
@@ -41,7 +37,7 @@ class PhieuNhapController extends Controller
             }
         });
 
-        return view('nhapkho.index', compact('phieu_nhap', 'ma_phieu_nhap'));
+        return view('nhapkho.index', compact('phieu_nhap', 'ma_phieu_nhap', 'nha_cung_cap'));
     }
 
     /**
@@ -49,48 +45,37 @@ class PhieuNhapController extends Controller
      */
     public function create()
     {
-        $ma_phieu_nhap = PhieuNhap::latest()->first()->ma_phieu_nhap;
-
-        if (!$ma_phieu_nhap) {
-            $ma_phieu_nhap = "PN000000";
-        } else {
-            $lastNumber = (int) substr($ma_phieu_nhap, 2);
-            $lastNumberLength = strlen((string)substr($ma_phieu_nhap, 2));
-            // dd($lastNumberLength);
-            $nextNumber = $lastNumber + 1;
-            $ma_phieu_nhap = 'PN' . str_pad($nextNumber, $lastNumberLength, '0', STR_PAD_LEFT);
-        }
-
         $hang_hoa = HangHoa::get();
+        $nha_cung_cap = NhaCungCap::get();
+        $ma_phieu_nhap = PhieuNhap::latest()->first()->ma_phieu_nhap ?? "PN000000";
 
-        return view('nhapkho.create', compact('ma_phieu_nhap', 'hang_hoa'));
+        $lastNumber = (int) substr($ma_phieu_nhap, 2);
+        $lastNumberLength = strlen((string)substr($ma_phieu_nhap, 2));
+        $nextNumber = $lastNumber + 1;
+        $ma_phieu_nhap = 'PN' . str_pad($nextNumber, $lastNumberLength, '0', STR_PAD_LEFT);
+
+
+        return view('nhapkho.create', compact('ma_phieu_nhap', 'hang_hoa', 'nha_cung_cap'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        dd($request);
-        $data = json_decode($request->getContent(), true);
-
-        return redirect()->route('nhap-kho.index');
-    }
     /**
      * Display the specified resource.
      */
     public function show($code)
     {
         $phieu_nhap = PhieuNhap::where('ma_phieu_nhap', $code)->firstOrFail();
-        $chi_tiet_phieu_nhap = ChiTietHangHoa::where('ma_phieu_nhap', $code)->get()->sortByDesc('id')->all();
+
+        $chi_tiet_phieu_nhap = [];
+
+        ChiTietHangHoa::where('ma_phieu_nhap', $code)->orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$chi_tiet_phieu_nhap) {
+            foreach ($chunk as $chi_tiet) {
+                $chi_tiet_phieu_nhap[] = $chi_tiet;
+            }
+        });
 
         return view('nhapkho.show', compact('phieu_nhap', 'chi_tiet_phieu_nhap'));
     }
 
-    public function showItem($code, $id)
-    {
-
-    }
 
     public function import(ExcelRequest $request)
     {
@@ -104,6 +89,7 @@ class PhieuNhapController extends Controller
         ], [
             'ma_phieu_nhap' => $data['ma_phieu_nhap'],
             'ngay_nhap' => $data['ngay_nhap'] ?? $dt->toDateString(),
+            'ma_ncc' => $data['ma_ncc'],
             'id_user' => auth()->user()->id,
             'mo_ta' => $mo_ta ?? 'Không có mô tả cụ thể!'
         ]);
@@ -111,21 +97,27 @@ class PhieuNhapController extends Controller
         try {
             $file = $request->file('excel_file');
             $ma_phieu_nhap = $data['ma_phieu_nhap'];
+            $ma_ncc = $data['ma_ncc'];
 
             $ct_hang_hoa = new ChiTietHangHoaImport();
             $ct_hang_hoa->setMaPhieu($ma_phieu_nhap);
+            $ct_hang_hoa->setTrangThai(3);
+            $ct_hang_hoa->setNhaCungCap($ma_ncc);
 
             Excel::import($ct_hang_hoa, $file);
-            return redirect()->route('nhap-kho.index')->with('status-success', 'Thêm dữ liệu từ file Excel thành công!!!');
+            return redirect()->route('nhap-kho.index')->with(['status' => 'Thêm dữ liệu từ file Excel thành công!!!', 'type' => 'success']);
 
         } catch(ValidationException $e) {
+            PhieuNhap::delete($phieu_nhap->id);
+            $ct_hang_hoa->truncate();
+
             $failures = $e->failures();
             $errors = [];
             foreach ($failures as $failure) {
                 $errors[] = "Dòng " . $failure->row() . ": " . $failure->errors()[0];
             }
 
-            return redirect()->back()->with(['errors' => $errors, 'status-error' => 'Xuất hiện lỗi trong khi thêm dữ liệu từ file Excel!']);
+            return back()->with(['errors' => $errors, 'status' => 'Xuất hiện lỗi trong khi thêm dữ liệu từ file Excel!', 'type' => 'danger']);
         }
     }
 }

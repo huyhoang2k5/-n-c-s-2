@@ -23,4 +23,9 @@ class ChiTietHangHoa extends Model
     {
         return $this->belongsTo(PhieuNhap::class, 'ma_phieu_nhap', 'ma_phieu_nhap');
     }
+
+    public function getNhaCungCap()
+    {
+        return $this->belongsTo(NhaCungCap::class, 'ma_ncc', 'ma_ncc');
+    }
 }

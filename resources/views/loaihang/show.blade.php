@@ -1,5 +1,13 @@
 @extends('default')
 
+@section('style')
+    <style>
+        .w-10 {
+            width: 10%!important;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="nk-content">
         <div class="container">
@@ -21,22 +29,31 @@
                                 </nav>
                             </div>
                             <div class="nk-block-head-content">
+                                <ul class="d-flex">
+                                    <li><a href="{{ route('loai-hang.edit', $loai_hang->id) }}"
+                                            class="btn btn-primary btn-md d-md-none"><em
+                                            class="icon ni ni-edit"></em><span>Sửa</span></a></li>
+                                    <li><a href="{{ route('loai-hang.edit', $loai_hang->id) }}"
+                                            class="btn btn-primary d-none d-md-inline-flex"><em
+                                            class="icon ni ni-edit"></em></em><span>Sửa loại hàng</span></a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 card mb-5">
+                        <div class="col card mb-5">
                             <div class="card-body">
                                 <h4 class="bio-block-title">Chi tiết</h4>
                                 <ul class="list-group list-group-borderless small">
                                     <li class="list-group-item">
-                                        <span class="title fw-medium w-40 d-inline-block">Tên
+                                        <span class="title fw-medium w-10 d-inline-block">Tên
                                             loại hàng:</span>
                                         <span class="text">{{ $loai_hang->ten_loai_hang }}</span>
                                     </li>
-                                    <li class="list-group-item"><span class="title fw-medium w-40 d-inline-block">Trạng
-                                            thái:</span><span class="badge text-bg-{{ $loai_hang->trang_thai == 3 ? 'success' : ($loai->trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $loai_hang->getTrangThai->ten_trang_thai }}</span></li>
-                                    <li class="list-group-item"><span class="title fw-medium w-40 d-inline-block">Mô
+                                    <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Trạng
+                                            thái:</span><span class="badge text-bg-{{ $loai_hang->id_trang_thai == 3 ? 'success' : ($loai_hang->id_trang_thai == 2 ? 'warning' : 'danger') }}-soft">{{ $loai_hang->getTrangThai->ten_trang_thai }}</span></li>
+                                    <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Mô
                                             tả:</span><span class="text"> {!! $loai_hang->mo_ta !!}</span></li>
                                 </ul>
                             </div>
@@ -48,11 +65,11 @@
                         <table class="datatable-init table" data-nk-container="table-responsive" id="hang-hoa">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="tb-col tb-col-md"><span class="overline-title">Mã hàng</span></th>
+                                    <th class="tb-col"><span class="overline-title">Mã hàng</span></th>
                                     <th class="tb-col"><span class="overline-title">Tên hàng</span></th>
                                     <th class="tb-col"><span class="overline-title">Số lượng</span></th>
-                                    <th class="tb-col tb-col-md"><span class="overline-title">Đơn vị</span></th>
-                                    <th class="tb-col tb-col-md"><span class="overline-title">Trạng thái</span></th>
+                                    <th class="tb-col"><span class="overline-title">Đơn vị</span></th>
+                                    <th class="tb-col"><span class="overline-title">Trạng thái</span></th>
                                     <th class="tb-col tb-col-end" data-sortable="false"><span
                                             class="overline-title">action</span></th>
                                 </tr>
@@ -61,12 +78,12 @@
 
                                 @foreach ($hang_hoa as $hang)
                                     <tr>
-                                        <td class="tb-col tb-col-md">
+                                        <td class="tb-col">
                                             <span>#{{ $hang->ma_hang_hoa }}</span>
                                         </td>
                                         <td class="tb-col">
                                             <div class="media-group">
-                                                <div class="media media-lg media-middle tb-col-md"><img
+                                                <div class="media media-lg media-middle"><img
                                                         src="{{ asset('storage/images/hanghoa/' . $hang->img) }}"
                                                         alt="img"></div>
                                                 <div class="media-text"><a
@@ -83,8 +100,8 @@
                                         <td class="tb-col"><span>
                                                 {{ $so_luong }}
                                             </span></td>
-                                        <td class="tb-col tb-col-md"><span>{{ $hang->don_vi_tinh }}</span></td>
-                                        <td class="tb-col tb-col-md">
+                                        <td class="tb-col"><span>{{ $hang->don_vi_tinh }}</span></td>
+                                        <td class="tb-col">
                                             <span
                                                 class="badge text-bg-{{ $so_luong > 0 ? 'success' : 'danger' }}-soft">{{ $so_luong > 0 ? 'Còn hàng' : 'Hết hàng' }}</span>
                                         </td>
