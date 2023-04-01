@@ -19,13 +19,15 @@
                                 </nav>
                             </div>
                             <div class="nk-block-head-content">
-                                <ul class="d-flex">
-                                    <li><a href="{{ route('hang-hoa.edit', $hang_hoa->ma_hang_hoa) }}" class="btn btn-primary btn-md d-md-none"><em
-                                                class="icon ni ni-edit"></em></em><span>Sửa</span></a></li>
-                                    <li><a href="{{ route('hang-hoa.edit', $hang_hoa->ma_hang_hoa) }}" class="btn btn-primary d-none d-md-inline-flex"><em
-                                                class="icon ni ni-edit"></em><span>Sửa thông tin</span></a>
-                                    </li>
-                                </ul>
+                                @can('user')
+                                    <ul class="d-flex">
+                                        <li><a href="{{ route('hang-hoa.edit', $hang_hoa->ma_hang_hoa) }}" class="btn btn-primary btn-md d-md-none"><em
+                                                    class="icon ni ni-edit"></em></em><span>Sửa</span></a></li>
+                                        <li><a href="{{ route('hang-hoa.edit', $hang_hoa->ma_hang_hoa) }}" class="btn btn-primary d-none d-md-inline-flex"><em
+                                                    class="icon ni ni-edit"></em><span>Sửa thông tin</span></a>
+                                        </li>
+                                    </ul>
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -50,7 +52,8 @@
                                     <li class="list-group-item"><span class="title fw-medium w-40 d-inline-block">Barcode:</span><span class="text">
                                             {{ $hang_hoa->barcode }}</span></li>
                                     <li class="list-group-item"><span class="title fw-medium w-40 d-inline-block">Tổng giá trị:</span>
-                                        <span class="text tong_gia_tri"></span>
+                                        <span class="text tong_gia_tri"> {{ number_format($hang_hoa->tong, 0, '', '.') }} VNĐ
+                                        </span>
                                     </li>
                                     <li class="list-group-item"><span class="title fw-medium w-40 d-inline-block">Mô
                                             tả:</span><span class="text"> {!! $hang_hoa->mo_ta !!}</span></li>
@@ -75,29 +78,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    use Carbon\Carbon;
-                                    $result = 0;
-                                @endphp
                                 @foreach ($chi_tiet_hang_hoa as $key => $chi_tiet)
-                                    @php
-                                        $price = $chi_tiet->so_luong * $chi_tiet->gia_nhap;
-                                        $result += $price;
-                                    @endphp
                                     <tr>
                                         <td class="tb-col">
                                             <span>{{ $key + 1 }}</span>
                                         </td>
                                         <td class="tb-col"><span>{{ $chi_tiet->so_luong }}</span></td>
-                                        <td class="tb-col"><span>{{ number_format($chi_tiet->gia_nhap, 0, '', '.') }} VND</span></td>
+                                        <td class="tb-col"><span>{{ number_format($chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span></td>
                                         <td class="tb-col">
-                                            <span>{{ Carbon::createFromFormat('Y-m-d', $chi_tiet->ngay_san_xuat)->format('d-m-Y') }}</span>
+                                            <span>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $chi_tiet->ngay_san_xuat)->format('d-m-Y') }}</span>
                                         </td>
                                         <td class="tb-col">
                                             <span>{{ $chi_tiet->tg_bao_quan }}</span>
                                         </td>
                                         <td class="tb-col">
-                                            <span class="tb-col">{{ number_format($price, 0, '', '.') }} VND</span>
+                                            <span class="tb-col">{{ number_format($chi_tiet->so_luong * $chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span>
                                         </td>
                                         <td class="tb-col tb-col-end"><a class="btn btn-info btn-sm"
                                                 href="{{ route('nhap-kho.show', $chi_tiet->ma_phieu_nhap) }}"><em class="icon ni ni-eye"></em><span>Xem</span></a>
@@ -116,8 +111,4 @@
 
 
 @section('script')
-    <script>
-        const tong_gia_tri = document.querySelector('.tong_gia_tri');
-        tong_gia_tri.textContent = "{{ number_format($result, 0, '', '.') }} VND"
-    </script>
 @endsection

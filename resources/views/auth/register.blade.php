@@ -15,10 +15,8 @@
                         <div class="row gy-3">
                             <div class="col-12">
                                 <div class="form-group"><label for="name" class="form-label">Tên</label>
-                                    <div class="form-control-wrap"><input type="text"
-                                            class="form-control @error('name') is-invalid @enderror" name="name"
-                                            value="{{ old('name') }}" required autocomplete="name" autofocus
-                                            placeholder="Enter name"></div>
+                                    <div class="form-control-wrap"><input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                                            value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Enter name"></div>
 
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -30,10 +28,8 @@
 
                             <div class="col-12">
                                 <div class="form-group"><label for="email" class="form-label">Email</label>
-                                    <div class="form-control-wrap"><input id="email" type="email"
-                                            class="form-control @error('email') is-invalid @enderror" name="email"
-                                            value="{{ old('email') }}" required autocomplete="email"
-                                            placeholder="Enter email address"></div>
+                                    <div class="form-control-wrap"><input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                            name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Enter email address"></div>
 
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -43,10 +39,19 @@
                                 </div>
                             </div>
                             <div class="col-12">
+                                <div class="form-group"> <label class="form-label">Role</label>
+                                    <div class="form-control-wrap"> <select class="js-select @error('role_id') is-invalid @enderror" data-search="false" data-sort="false" name="role_id" required>
+                                            <option value="0">Nhân viên</option>
+                                            <option value="1">Admin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
                                 <div class="form-group"><label for="password" class="form-label">Password</label>
                                     <div class="form-control-wrap"><input id="password" type="password"
-                                            class="form-control @error('password') is-invalid @enderror" name="password"
-                                            required autocomplete="new-password" placeholder="Enter password"></div>
+                                            class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password"
+                                            placeholder="Enter password"></div>
 
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -58,9 +63,8 @@
 
                             <div class="col-12">
                                 <div class="form-group"><label for="password-confirm" class="form-label">Password confirm</label>
-                                    <div class="form-control-wrap"><input id="password-confirm" type="password"
-                                            class="form-control" name="password_confirmation" required
-                                            autocomplete="new-password" placeholder="Enter password"></div>
+                                    <div class="form-control-wrap"><input id="password-confirm" type="password" class="form-control" name="password_confirmation"
+                                            required autocomplete="new-password" placeholder="Enter password"></div>
 
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -82,9 +86,9 @@
                     </form>
                 </div>
             </div>
-            <div class="text-center mt-5">
+            {{-- <div class="text-center mt-5">
                 <p class="small">Bạn đã có tài khoản? <a href="{{ route('login') }}">Đăng nhập</a></p>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection

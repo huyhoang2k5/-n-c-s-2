@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('phieu_nhap', function (Blueprint $table) {
             $table->id();
-            $table->char('ma_phieu_nhap');
+            $table->char('ma_phieu_nhap')->unique();
             $table->foreignId('id_user')->nullable()->constrained('users')->nullOnDelete();
-            $table->char('ma_ncc')->references('ma_ncc')->on('nha_cung_cap')->onDelete('set null');
+            $table->char('ma_ncc')->references('ma_ncc')->on('nha_cung_cap')->nullOnDelete();
             $table->date('ngay_nhap')->default(now()->toDateString());
             $table->text('mo_ta')->nullable();
             $table->timestamps();

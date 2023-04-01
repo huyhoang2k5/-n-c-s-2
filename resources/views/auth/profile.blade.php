@@ -55,8 +55,12 @@
                                         <ul class="list-group list-group-borderless small">
                                             <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Họ và tên:</span><span
                                                     class="text">{{ auth()->user()->name }}</span></li>
+                                            <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Giới tính:</span><span
+                                                    class="text">{{ auth()->user()->gioi_tinh }}</span></li>
                                             <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Email:</span><span
                                                     class="text">{{ auth()->user()->email }}</span></li>
+                                            <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Số điện thoại:</span><span
+                                                    class="text">{{ auth()->user()->sdt }}</span></li>
                                             <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Địa chỉ:</span><span
                                                     class="text">{{ auth()->user()->address }}</span></li>
                                             <li class="list-group-item"><span class="title fw-medium w-10 d-inline-block">Ngày đăng ký:</span><span
@@ -70,33 +74,95 @@
 
                     <div class="tab-pane fade" id="edit-profile">
                         <div class="nk-block">
-                            <div class="card card-gutter-md">
-                                <div class="card-body">
-                                    <div class="bio-block">
-                                        <h4 class="bio-block-title mb-4">Sửa thông tin cá nhân</h4>
-                                        <form action="{{ route('user.updateProfile') }}" method="POST">
-                                            @csrf
-                                            <div class="row g-3">
-                                                <div class="col-lg-12">
-                                                    <div class="form-group"><label for="name" class="form-label">Họ và tên</label>
-                                                        <div class="form-control-wrap"><input type="text" class="form-control" id="name"
-                                                                placeholder="Họ tên" value="{{ auth()->user()->name }}">
+                            <form action="{{ route('user.updateProfile') }}" method="POST">
+                                @csrf
+                                <div class="row g-gs">
+                                    <div class="col-xxl-9">
+                                        <div class="gap gy-4">
+                                            <div class="gap-col">
+                                                <div class="card card-gutter-md">
+                                                    <div class="card-body">
+                                                        <div class="bio-block">
+                                                            <h4 class="bio-block-title mb-4">Sửa thông tin cá nhân</h4>
+
+                                                            <div class="row g-3">
+                                                                <div class="col-lg-12">
+                                                                    <div class="form-group"><label for="name" class="form-label">Họ và tên</label>
+                                                                        <div class="form-control-wrap"><input type="text" class="form-control" id="name"
+                                                                                placeholder="Họ tên" value="{{ auth()->user()->name }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Giới tính</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <select class="js-select" name="gioi_tinh" data-search="false" data-sort="false">
+                                                                                <option value="Nam" {{ old('gioi_tinh') == 'Nam' ? 'selected' : '' }}>Nam
+                                                                                </option>
+                                                                                <option value="Nữ" {{ old('gioi_tinh') == 'Nữ' ? 'selected' : '' }}>Nữ</option>
+                                                                                <option value="Ẩn" {{ old('gioi_tinh') == 'Ẩn' ? 'selected' : '' }}>Ẩn</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        @if ($errors)
+                                                                            <span class="text-danger py-1 mt-2">{{ $errors->first('id_loai_hang') }}</span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="form-group"><label for="sdt" class="form-label">Số điện thoại</label>
+                                                                        <div class="form-control-wrap"><input type="text" class="form-control" id="sdt"
+                                                                                placeholder="Số điện thoại" value="{{ auth()->user()->sdt }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12">
+                                                                    <div class="form-group"><label for="dia_chi" class="form-label">Địa chỉ</label>
+                                                                        <div class="form-control-wrap"><input type="text" class="form-control" id="dia_chi"
+                                                                                placeholder="Địa chỉ" value="{{ auth()->user()->dia_chi }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-12"><button class="btn btn-primary" type="submit">Xác nhận</button></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-12">
-                                                    <div class="form-group"><label for="dia_chi" class="form-label">Địa chỉ</label>
-                                                        <div class="form-control-wrap"><input type="text" class="form-control" id="dia_chi"
-                                                                placeholder="Địa chỉ" value="{{ auth()->user()->dia_chi }}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12"><button class="btn btn-primary" type="submit">Xác nhận</button></div>
                                             </div>
-                                        </form>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-3">
+                                        <div class="card card-gutter-md">
+                                            <div class="card-body">
+                                                <div class="row g-gs">
+                                                    <div class="col-12">
+                                                        <div class="form-group"><label class="form-label">Avatar</label>
+                                                            <div class="form-control-wrap">
+                                                                <div class="image-upload-wrap d-flex flex-column align-items-center">
+                                                                    <div class="media media-huge border">
+                                                                        <img id="img" class="w-100 h-100" src="" alt="img">
+                                                                    </div>
+                                                                    <div class="pt-3">
+                                                                        <input class="upload-image" data-target="img" id="change-img" name="change_img"
+                                                                            type="file" max="1" hidden>
+                                                                        <input type="hidden" id="default-img" name=""
+                                                                            value="{{ auth()->user()->avatar }}">
+                                                                        <label for="change-img" class="btn btn-md btn-primary">Thay đổi</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            @if ($errors)
+                                                                <span class="text-danger py-1 mt-2">{{ $errors->first('change_img') }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
+
                         </div>
                     </div>
 
@@ -165,4 +231,12 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        const imgInput = document.getElementById('default-img')
+        const img = document.getElementById('img')
+        img.src = '{{ asset('storage/images/user') }}/' + imgInput.value
+    </script>
 @endsection

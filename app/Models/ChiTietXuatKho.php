@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ChiTietPhieuXuat extends Model
+class ChiTietXuatKho extends Model
 {
     use HasFactory;
 
@@ -13,9 +13,9 @@ class ChiTietPhieuXuat extends Model
 
     protected $guarded = ['id'];
 
-    public function getPhieuXuat()
+    public function getXuatKho()
     {
-        return $this->belongsTo(PhieuXuat::class, 'ma_phieu_xuat', 'ma_phieu_xuat');
+        return $this->belongsTo(XuatKho::class, 'ma_phieu_xuat', 'ma_phieu_xuat');
     }
 
     public function getChiTiet()

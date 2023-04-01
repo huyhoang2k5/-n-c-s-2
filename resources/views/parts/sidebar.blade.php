@@ -2,7 +2,9 @@
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
             <a href="{{ route('dashboard') }}" class="logo-link">
-                <div class="logo-wrap">Kho</div>
+                <div class="logo-wrap">
+                    <img class="logo-svg" src="{{ asset('assets/images/favicon.png') }}" alt="">
+                </div>
             </a>
             <div class="nk-compact-toggle me-n1"><button class="btn btn-md btn-icon text-light btn-no-hover compact-toggle"><em
                         class="icon off ni ni-chevrons-left"></em><em class="icon on ni ni-chevrons-right"></em></button>
@@ -68,23 +70,24 @@
                             </a>
                         </li>
 
-                        <li class="nk-menu-item">
-                            <a href="apps/todo/todo.html" class="nk-menu-link">
+                        <li class="{{ request()->is('thong-ke*') ? 'active' : '' }}">
+                            <a href="{{ route('thong-ke.index') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon">
                                     <em class="icon ni ni-todo"></em>
                                 </span>
                                 <span class="nk-menu-text">Thống kê</span>
                             </a>
                         </li>
-
-                        <li class="nk-menu-item">
-                            <a href="apps/todo/todo.html" class="nk-menu-link">
-                                <span class="nk-menu-icon">
-                                    <em class="icon ni ni-users"></em>
-                                </span>
-                                <span class="nk-menu-text">Quản lý tài khoản</span>
-                            </a>
-                        </li>
+                        @can('user')
+                            <li class="{{ request()->is('tai-khoan*') ? 'active' : '' }}">
+                                <a href="{{ route('tai-khoan.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon">
+                                        <em class="icon ni ni-users"></em>
+                                    </span>
+                                    <span class="nk-menu-text">Quản lý tài khoản</span>
+                                </a>
+                            </li>
+                        @endcan
                     @endauth
                 </ul>
             </div>

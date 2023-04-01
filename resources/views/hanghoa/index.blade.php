@@ -12,27 +12,25 @@
                         <div class="nk-block-head-between flex-wrap gap g-2">
                             <div class="nk-block-head-content">
                                 <h2 class="nk-block-title">Quản lý kho</h2>
-                                    <nav>
-                                        <ol class="breadcrumb breadcrumb-arrow mb-0">
-                                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
-                                            </li>
-                                            <li class="breadcrumb-item"><a href="{{ route('hang-hoa.index') }}">Quản lý
-                                                    kho</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Danh sách
-                                            </li>
-                                        </ol>
-                                    </nav>
+                                <nav>
+                                    <ol class="breadcrumb breadcrumb-arrow mb-0">
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">Quản lý
+                                            kho</li>
+                                    </ol>
+                                </nav>
                             </div>
                             <div class="nk-block-head-content">
-                                <ul class="d-flex">
-                                    <li><a href="{{ route('hang-hoa.create') }}"
-                                            class="btn btn-primary btn-md d-md-none"><em
-                                                class="icon ni ni-plus"></em><span>Thêm</span></a></li>
-                                    <li><a href="{{ route('hang-hoa.create') }}"
-                                            class="btn btn-primary d-none d-md-inline-flex"><em
-                                                class="icon ni ni-plus"></em><span>Thêm hàng hóa</span></a>
-                                    </li>
-                                </ul>
+                                @can('user')
+                                    <ul class="d-flex">
+                                        <li><a href="{{ route('hang-hoa.create') }}" class="btn btn-primary btn-md d-md-none"><em
+                                                    class="icon ni ni-plus"></em><span>Thêm</span></a></li>
+                                        <li><a href="{{ route('hang-hoa.create') }}" class="btn btn-primary d-none d-md-inline-flex"><em
+                                                    class="icon ni ni-plus"></em><span>Thêm hàng hóa</span></a>
+                                        </li>
+                                    </ul>
+                                @endcan
                             </div>
                         </div>
                     </div>
@@ -48,8 +46,7 @@
                                         <th class="tb-col"><span class="overline-title">Đơn vị</span></th>
                                         <th class="tb-col"><span class="overline-title">Loại hàng</span></th>
                                         <th class="tb-col"><span class="overline-title">Trạng thái</span></th>
-                                        <th class="tb-col tb-col-end" data-sortable="false"><span
-                                                class="overline-title">action</span></th>
+                                        <th class="tb-col tb-col-end" data-sortable="false"><span class="overline-title">Hành động</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -60,15 +57,16 @@
                                                 <span>{{ $key + 1 }}</span>
                                             </td>
                                             <td class="tb-col">
-                                                <span>{{ $hang->ma_hang_hoa }}</span>
+                                                <span>{{ strlen($hang->ma_hang_hoa) > 10 ? substr($hang->ma_hang_hoa, 0, 10) . '...' : substr($hang->ma_hang_hoa, 0, 10) }}</span>
                                             </td>
                                             <td class="tb-col">
                                                 <div class="media-group">
-                                                    <div class="media media-lg media-middle"><img
-                                                            src="{{ asset('storage/images/hanghoa/' . $hang->img) }}"
+                                                    <div class="media media-lg media-middle"><img src="{{ asset('storage/images/hanghoa/' . $hang->img) }}"
                                                             alt="img"></div>
-                                                    <div class="media-text"><a href="{{ route('hang-hoa.show', $hang->ma_hang_hoa) }}"
-                                                            class="title">{{ $hang->ten_hang_hoa }}</a></div>
+                                                    <div class="media-text" >
+                                                        <a href="{{ route('hang-hoa.show', $hang->ma_hang_hoa) }}"
+                                                            class="title">{{ strlen($hang->ten_hang_hoa) > 20 ? substr($hang->ten_hang_hoa, 0, 20) . '...' : substr($hang->ten_hang_hoa, 0, 20) }}</a>
+                                                    </div>
                                                 </div>
                                             </td>
                                             @php
@@ -77,31 +75,29 @@
                                                     $so_luong += $value->so_luong;
                                                 }
                                             @endphp
-                                            <td class="tb-col"><span>
-                                                {{ $so_luong }}
-                                                </span></td>
+                                            <td class="tb-col"><span>{{ $so_luong }}</span></td>
                                             <td class="tb-col"><span>{{ $hang->don_vi_tinh }}</span></td>
                                             <td class="tb-col">
-                                                <span>{{ $hang->getLoaiHang->ten_loai_hang }}</span>
+                                                <span>{{ strlen($hang->getLoaiHang->ten_loai_hang) > 15 ? substr($hang->getLoaiHang->ten_loai_hang, 0, 15) . '...' : substr($hang->getLoaiHang->ten_loai_hang, 0, 15) }}</span>
                                             </td>
                                             <td class="tb-col">
                                                 <span
                                                     class="badge text-bg-{{ $so_luong > 0 ? 'success' : 'danger' }}-soft">{{ $so_luong > 0 ? 'Còn hàng' : 'Hết hàng' }}</span>
                                             </td>
                                             <td class="tb-col tb-col-end">
-                                                <div class="dropdown"><a href="#"
-                                                        class="btn btn-sm btn-icon btn-zoom me-n1"
-                                                        data-bs-toggle="dropdown"><em class="icon ni ni-more-v"></em></a>
+                                                <div class="dropdown"><a href="#" class="btn btn-sm btn-icon btn-zoom me-n1" data-bs-toggle="dropdown"><em
+                                                            class="icon ni ni-more-v"></em></a>
                                                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-end">
                                                         <div class="dropdown-content py-1">
                                                             <ul class="link-list link-list-hover-bg-primary link-list-md">
-                                                                <li><a href="{{ route('hang-hoa.edit', $hang->ma_hang_hoa) }}"><em
-                                                                            class="icon ni ni-edit"></em><span>Sửa</span></a>
-                                                                </li>
-                                                                <li><a href="#" data-bs-toggle="modal"
-                                                                    data-bs-target="#xoa_hang_hoa"><em
-                                                                            class="icon ni ni-trash"></em><span>Xóa</span></a>
-                                                                </li>
+                                                                @can('user')
+                                                                    <li><a href="{{ route('hang-hoa.edit', $hang->ma_hang_hoa) }}"><em
+                                                                                class="icon ni ni-edit"></em><span>Sửa</span></a>
+                                                                    </li>
+                                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#xoa_hang_hoa"><em
+                                                                                class="icon ni ni-trash"></em><span>Xóa</span></a>
+                                                                    </li>
+                                                                @endcan
                                                                 <li><a href="{{ route('hang-hoa.show', $hang->ma_hang_hoa) }}"><em
                                                                             class="icon ni ni-eye"></em><span>Xem chi
                                                                             tiết</span></a></li>
@@ -111,36 +107,33 @@
                                                 </div>
                                             </td>
                                         </tr>
-
-                                        <div class="modal fade" id="xoa_hang_hoa" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="scrollableLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-top">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="scrollableLabel">Bạn
-                                                            chắc chắc muốn xóa?
-                                                        </h5> <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">Đồng ý
-                                                        nghĩa là bạn muốn xóa toàn
-                                                        bộ dữ liệu liên quan đến hàng hóa này!
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-sm btn-secondary"
-                                                            data-bs-dismiss="modal">Đóng</button>
-                                                        <form method="POST"
-                                                            action="{{ route('hang-hoa.delete', $hang->id) }}"
-                                                            id="delete-form">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <button type="submit" class="btn btn-sm btn-primary">Đồng
-                                                                ý</button>
-                                                        </form>
+                                        @can('user')
+                                            <div class="modal fade" id="xoa_hang_hoa" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scrollableLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-top">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="scrollableLabel">Bạn
+                                                                chắc chắc muốn xóa?
+                                                            </h5> <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">Đồng ý
+                                                            nghĩa là bạn muốn xóa toàn
+                                                            bộ dữ liệu liên quan đến hàng hóa này!
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                            <form method="POST" action="{{ route('hang-hoa.delete', $hang->id) }}" id="delete-form">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button type="submit" class="btn btn-sm btn-primary">Đồng
+                                                                    ý</button>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endcan
                                     @endforeach
 
                                 </tbody>

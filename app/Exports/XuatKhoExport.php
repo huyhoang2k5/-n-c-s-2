@@ -7,9 +7,8 @@ use Maatwebsite\Excel\Events\ExportFailed;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use App\Models\ChiTietPhieuXuat;
 
-class PhieuXuatExport implements FromArray, WithHeadings, ShouldAutoSize
+class XuatKhoExport implements FromArray, WithHeadings, ShouldAutoSize
 {
     protected $data;
 

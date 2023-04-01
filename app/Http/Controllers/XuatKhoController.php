@@ -1,24 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\PhieuXuat;
+use App\Models\XuatKho;
 use App\Models\HangHoa;
-use App\Models\ChiTietPhieuXuat;
+use App\Models\ChiTietXuatKho;
 use App\Models\ChiTietHangHoa;
-use App\Exports\PhieuXuatExport;
+use App\Exports\XuatKhoExport;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 use Illuminate\Http\Request;
 
-class PhieuXuatController extends Controller
+class XuatKhoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $ma_phieu_xuat = PhieuXuat::latest()->first()->ma_phieu_xuat ?? "PX000000";
+        $ma_phieu_xuat = XuatKho::latest()->first()->ma_phieu_xuat ?? "PX000000";
 
         $lastNumber = (int) substr($ma_phieu_xuat, 2);
         $lastNumberLength = strlen((string)substr($ma_phieu_xuat, 2));
@@ -27,7 +26,7 @@ class PhieuXuatController extends Controller
 
         $phieu_xuat = [];
 
-        PhieuXuat::orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$phieu_xuat) {
+        XuatKho::orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$phieu_xuat) {
             foreach ($chunk as $phieu) {
                 $phieu_xuat[] = $phieu;
             }
@@ -42,7 +41,7 @@ class PhieuXuatController extends Controller
 
     public function create()
     {
-        $ma_phieu_xuat = PhieuXuat::latest()->first()->ma_phieu_xuat ?? "PX000000";
+        $ma_phieu_xuat = XuatKho::latest()->first()->ma_phieu_xuat ?? "PX000000";
 
         $lastNumber = (int) substr($ma_phieu_xuat, 2);
         $lastNumberLength = strlen((string)substr($ma_phieu_xuat, 2));
@@ -65,11 +64,11 @@ class PhieuXuatController extends Controller
      */
     public function show($code)
     {
-        $phieu_xuat = PhieuXuat::where('ma_phieu_xuat', $code)->firstOrFail();
+        $phieu_xuat = XuatKho::where('ma_phieu_xuat', $code)->firstOrFail();
 
         $chi_tiet_phieu_xuat = [];
 
-        ChiTietPhieuXuat::where('ma_phieu_xuat', $code)->orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$chi_tiet_phieu_xuat) {
+        ChiTietXuatKho::where('ma_phieu_xuat', $code)->orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$chi_tiet_phieu_xuat) {
             foreach ($chunk as $chi_tiet) {
                 $chi_tiet_phieu_xuat[] = $chi_tiet;
             }
@@ -87,7 +86,7 @@ class PhieuXuatController extends Controller
             if (count($data) > 1) {
                 $mo_ta = json_decode($data[0]['mo_ta'], true) ?? 'Chưa có mô tả cụ thể!';
 
-                $phieu_xuat = PhieuXuat::firstOrCreate(
+                $phieu_xuat = XuatKho::firstOrCreate(
                     ['ma_phieu_xuat' => $data[0]['ma_phieu_xuat']],
                     [
                     'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
@@ -104,7 +103,7 @@ class PhieuXuatController extends Controller
                         $cthh = ChiTietHangHoa::find($data[$i]['id_hang_hoa']);
                         $hh = HangHoa::where('ma_hang_hoa', $cthh->ma_hang_hoa)->first();
 
-                        ChiTietPhieuXuat::create([
+                        ChiTietXuatKho::create([
                             'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
                             'id_chi_tiet_hang_hoa' => $data[$i]['id_hang_hoa'],
                             'so_luong' => $data[$i]['so_luong'],
@@ -123,11 +122,11 @@ class PhieuXuatController extends Controller
                         $dataExport[] = $item;
 
                         $cthh->so_luong -= $data[$i]['so_luong'];
-                        $cthh->so_luong == 0 ?? $cthh->trang_thai = 1;
+                        $cthh->so_luong == 0 ?? $cthh->id_trang_thai = 1;
                         $cthh->save();
                     }
 
-                    $excel = Excel::download(new PhieuXuatExport($dataExport), 'xuat-kho.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+                    $excel = Excel::download(new XuatKhoExport($dataExport), 'xuat-kho.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 
                     $excelPath = $excel->getFile()->getPathname();
                     \Storage::disk('public')->put('excel/xuat-kho.xlsx', file_get_contents($excelPath));
@@ -135,7 +134,7 @@ class PhieuXuatController extends Controller
                     return response()->json(['type' => 'export', 'message' => 'Xuất file excel thành công. Bạn có muốn tải về không?', 'downloadUrl' => route('xuat-kho.download')]);
                 }
 
-                PhieuXuat::delete($phieu_xuat->id);
+                XuatKho::delete($phieu_xuat->id);
 
                 return response()->json(['message'=> 'Mã phiếu xuất đã tồn tại. Vui lòng tải lại trang để được nhận mã phiểu mới!']);
             }

@@ -63,10 +63,6 @@
                                                 @endphp
 
                                                 @foreach ($chi_tiet_phieu_nhap as $key => $chi_tiet)
-                                                    @php
-                                                        $price = $chi_tiet->so_luong_goc * $chi_tiet->gia_nhap;
-                                                        $result += $price;
-                                                    @endphp
                                                     <tr>
                                                         <td class="tb-col">
                                                             <span>{{ $key + 1 }}</span>
@@ -80,7 +76,7 @@
                                                         <td class="tb-col"><span>{{ $chi_tiet->so_luong_goc }}</span></td>
                                                         <td class="tb-col"><span>{{ number_format($chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span></td>
                                                         <td class="tb-col">
-                                                            <span>{{ number_format($price, 0, '', '.') }} VNĐ</span>
+                                                            <span>{{ number_format($chi_tiet->so_luong_goc * $chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span>
                                                         </td>
                                                         <td class="tb-col tb-col-end"><a class="btn btn-info btn-sm"
                                                                 href="{{ route('hang-hoa.show', $chi_tiet->ma_hang_hoa) }}"><em
@@ -93,7 +89,7 @@
                                                 <tr>
                                                     <td colspan="4"></td>
                                                     <td colspan="">Tổng:</td>
-                                                    <td class="tb-col">{{ number_format($result, 0, '', ',') }} VNĐ</td>
+                                                    <td class="tb-col">{{ number_format($phieu_nhap->tong, 0, '', ',') }} VNĐ</td>
                                                 </tr>
                                             </tfoot>
                                         </table>

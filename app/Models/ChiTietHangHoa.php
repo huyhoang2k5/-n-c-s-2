@@ -19,13 +19,18 @@ class ChiTietHangHoa extends Model
         return $this->belongsTo(HangHoa::class, 'ma_hang_hoa', 'ma_hang_hoa');
     }
 
-    public function getPhieuNhap()
+    public function getNhapKho()
     {
-        return $this->belongsTo(PhieuNhap::class, 'ma_phieu_nhap', 'ma_phieu_nhap');
+        return $this->belongsTo(NhapKho::class, 'ma_phieu_nhap', 'ma_phieu_nhap');
     }
 
     public function getNhaCungCap()
     {
         return $this->belongsTo(NhaCungCap::class, 'ma_ncc', 'ma_ncc');
+    }
+
+    public function getChiTietXuatKho()
+    {
+        return $this->hasMany(ChiTietXuatKho::class, 'id_chi_tiet_hang_hoa', 'id');
     }
 }

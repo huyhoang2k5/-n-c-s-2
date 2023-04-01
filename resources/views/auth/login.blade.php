@@ -15,10 +15,8 @@
                         <div class="row gy-3">
                             <div class="col-12">
                                 <div class="form-group"><label for="email" class="form-label">Email</label>
-                                    <div class="form-control-wrap"><input type="email"
-                                            class="form-control @error('email') is-invalid @enderror" name="email"
-                                            id="email" value="{{ old('email') }}" required autocomplete="email"
-                                            autofocus placeholder="Enter email"></div>
+                                    <div class="form-control-wrap"><input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                                            id="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Enter email"></div>
 
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -30,10 +28,8 @@
 
                             <div class="col-12">
                                 <div class="form-group"><label for="password" class="form-label">Password</label>
-                                    <div class="form-control-wrap"><input type="password"
-                                            class="form-control @error('password') is-invalid @enderror" id="password"
-                                            name="password" required autocomplete="current-password"
-                                            placeholder="Enter password"></div>
+                                    <div class="form-control-wrap"><input type="password" class="form-control @error('password') is-invalid @enderror"
+                                            id="password" name="password" required autocomplete="current-password" placeholder="Enter password"></div>
 
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -44,11 +40,10 @@
                             </div>
                             <div class="col-12">
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="form-check form-check-sm"><input class="form-check-input" type="checkbox"
-                                            value="" name="remember" id="remember"
+                                    <div class="form-check form-check-sm">
+                                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
                                             {{ old('remember') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="remember">
-                                            Nhớ tài khoản</label>
+                                        <label class="form-check-label" for="remember">Nhớ tài khoản</label>
                                     </div>
                                     @if (Route::has('password.request'))
                                         <a href="{{ route('password.request') }}" class="small">Quên mật khẩu?</a>

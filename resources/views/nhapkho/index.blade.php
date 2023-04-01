@@ -20,9 +20,8 @@
                                     <ol class="breadcrumb breadcrumb-arrow mb-0">
                                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
                                         </li>
-                                        <li class="breadcrumb-item"><a href="{{ route('nhap-kho.index') }}">Quản lý nhập
-                                                kho</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Danh sách</li>
+                                        <li class="breadcrumb-item active" aria-current="page">Quản lý nhập
+                                            kho</li>
                                     </ol>
                                 </nav>
                             </div>

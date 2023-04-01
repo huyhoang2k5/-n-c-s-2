@@ -39,29 +39,48 @@
                                                 <div class="card-body">
                                                     <div class="row g-gs">
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"><label for="ma_phieu_xuat" class="form-label">Mã phiếu xuất</label>
+                                                            <div class="form-group">
+                                                                <label for="ma_phieu_xuat" class="form-label">Mã phiếu xuất</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" minlength="1" maxlength="255" class="form-control" name="ma_phieu_xuat"
                                                                         value="{{ $ma_phieu_xuat }}" disabled>
                                                                 </div>
+                                                                @if ($errors)
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('ma_phieu_xuat') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"> <label for="ngay_xuat" class="form-label">Ngày xuất</label>
-                                                                <div class="form-control-wrap"> <input type="date" class="form-control" name="ngay_xuat"
-                                                                        value="{{ old('ngay_xuat') }}" required> </div>
+                                                            <div class="form-group">
+                                                                <label for="ngay_xuat" class="form-label">Ngày xuất</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="date" class="form-control" name="ngay_xuat" value="{{ old('ngay_xuat') }}"
+                                                                        required>
+                                                                </div>
+                                                                @if ($errors)
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('ngay_xuat') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
                                                             <div class="form-group"> <label for="khach_hang" class="form-label">Khách hàng</label>
-                                                                <div class="form-control-wrap"> <input type="text" class="form-control" name="khach_hang"
-                                                                        placeholder="Nhập khách hàng" value="{{ old('khach_hang') }}" required> </div>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="khach_hang" placeholder="Nhập khách hàng"
+                                                                        value="{{ old('khach_hang') }}" required>
+                                                                </div>
+                                                                @if ($errors)
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('khach_hang') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
                                                             <div class="form-group"> <label for="dia_chi" class="form-label">Địa chỉ</label>
                                                                 <div class="form-control-wrap"> <input type="text" class="form-control" name="dia_chi"
-                                                                        placeholder="Nhập địa chỉ" value="{{ old('dia_chi') }}" required> </div>
+                                                                        placeholder="Nhập địa chỉ" value="{{ old('dia_chi') }}" required>
+                                                                </div>
+                                                                @if ($errors)
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('dia_chi') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
@@ -150,14 +169,23 @@
         referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
-        const formCreate = document.getElementById('form-create')
         $(document).ready(function() {
-
+            const formCreate = document.getElementById('form-create')
+            const inNum = document.querySelectorAll('input[type="number"]');
             const quill = new Quill('#quill_editor', {
                 theme: 'snow'
             });
-
             let selectedValues = []
+
+            inNum.forEach(e => {
+                e.addEventListener('input', function() {
+                    if (this.value < 0) {
+                        this.value = 0;
+                    } else if (this.value > parseInt(e.getAttribute('max'))) {
+                        this.value = parseInt(e.getAttribute('max'));
+                    }
+                });
+            });
 
             $('#searchInput').autocomplete({
                 source: function(request, response) {
@@ -221,7 +249,7 @@
 
                     $soLuong.on('input', function() {
                         if (this.value <= 0) {
-                            this.value = 0;
+                            this.value = '';
                         } else if (this.value > parseInt($soLuong.attr('max'))) {
                             this.value = parseInt($soLuong.attr('max'));
                         }
@@ -230,7 +258,9 @@
                     $soLuong.on('keyup', function() {
                         if ($soLuong.val() > 0 && $gia.val() > 0) {
                             let tongTien = $soLuong.val() * $gia.val();
-                            $thanhTien.html(`<span>${tongTien} VNĐ</span>`);
+                            $thanhTien.html(
+                                `<span>${new Intl.NumberFormat('vi-VN', { maximumSignificantDigits: 3 }).format(tongTien)} VNĐ</span>`
+                            );
                         } else {
                             $thanhTien.html(`<span>0 VNĐ</span>`);
                         }
@@ -239,7 +269,9 @@
                     $gia.on('keyup', function() {
                         if ($soLuong.val() > 0 && $gia.val() > 0) {
                             let tongTien = $soLuong.val() * $gia.val();
-                            $thanhTien.html(`<span>${tongTien} VNĐ</span>`);
+                            $thanhTien.html(
+                                `<span>${new Intl.NumberFormat('vi-VN', { maximumSignificantDigits: 3 }).format(tongTien)} VNĐ</span>`
+                            );
                         } else {
                             $thanhTien.html(`<span>0 VNĐ</span>`);
                         }
@@ -279,6 +311,7 @@
                 const dia_chi = $('input[name="dia_chi"]').val()
                 const mo_ta = quill.getContents().ops[0].insert
                 const id_user = {{ auth()->user()->id }}
+                console.log(mo_ta);
 
                 let data = [{
                     ma_phieu_xuat: ma_phieu_xuat,

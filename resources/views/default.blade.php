@@ -19,7 +19,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('assets/css/style8a4f.css?v1.1.0') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/libs/editors/quill8a4f.css?v1.1.0') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/jquery.dataTables.min.css"

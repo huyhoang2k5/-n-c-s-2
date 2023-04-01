@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('avatar')->nullable()->default('avatar.jpg');
             $table->string('dia_chi')->nullable();
+            $table->string('gioi_tinh')->nullable();
+            $table->integer('sdt')->unsigned()->nullable();
             $table->integer('role_id')->nullable();
             $table->rememberToken();
             $table->timestamps();

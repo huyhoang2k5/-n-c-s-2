@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PhieuNhap;
+use App\Models\NhapKho;
 use App\Models\ChiTietHangHoa;
 use App\Models\HangHoa;
+use Illuminate\Support\Facades\Validator;
 
-class PhieuNhapController extends Controller
+class NhapKhoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,22 +25,26 @@ class PhieuNhapController extends Controller
     public function store(Request $request)
     {
         $data = json_decode($request->getContent(), true);
+        $validator = Validator::make($data[0], [
+            'ma_phieu_nhap' => 'required|max:20|unique:phieu_nhap,ma_phieu_nhap',
+            'ngay_nhap' => 'required',
+            'id_user' => 'required|integer',
+            'ma_ncc' => 'required|string',
+        ]);
 
-        if (count($data) > 1) {
-            $mo_ta = json_decode($data[0]['mo_ta'], true)->ops[0]->insert ?? 'Chưa có mô tả cụ thể!';
-            $phieu_nhap = PhieuNhap::firstOrCreate([
-                'ma_phieu_nhap' => $data[0]['ma_phieu_nhap']
-            ],
-            [
+        if ($validator->fails()) {
+            return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Vui lòng tải lại trang!']);
+        } else {
+
+            $phieu_nhap = NhapKho::create([
                 'ma_phieu_nhap' => $data[0]['ma_phieu_nhap'],
                 'ngay_nhap' => $data[0]['ngay_nhap'],
                 'id_user' => $data[0]['id_user'],
                 'ma_ncc' => $data[0]['ma_ncc'],
-                'mo_ta' => $mo_ta
+                'mo_ta' => strlen($data[0]['mo_ta']) == 0 ? 'Không có mô tả cụ thể!' : $data[0]['mo_ta']
             ]);
 
-            if ($phieu_nhap->wasRecentlyCreated) {
-
+            if (count($data) > 1) {;
                 for ($i = 1; $i < count($data); $i++) {
                     ChiTietHangHoa::create([
                         'ma_phieu_nhap' => $data[0]['ma_phieu_nhap'],
@@ -53,15 +58,16 @@ class PhieuNhapController extends Controller
                         'tg_bao_quan' => $data[$i]['tg_bao_quan'],
                     ]);
                 }
-            } else {
 
-                return response()->json(['message'=> 'Mã phiếu nhập đã tồn tại. Vui lòng tải lại trang để được nhận mã phiểu mới!']);
+                return response()->json(['message'=> 'Nhập kho thành công', 'type' => 'success', 'redirect' => route('nhap-kho.index')], 200);
+            } else {
+                NhapKho::delete($phieu_nhap->id);
+                ChiTietHangHoa::where('ma_phieu_nhap', $phieu_nhap->ma_phieu_nhap)->delete();
+                return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Vui lòng kiểm tra và thử lại!']);
             }
 
-            return response()->json(['message'=> 'Nhập kho thành công', 'type' => 'success', 'redirect' => route('nhap-kho.index')], 200);
-        } else {
-            return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Vui lòng kiểm tra và thử lại!']);
         }
+
     }
 
     /**

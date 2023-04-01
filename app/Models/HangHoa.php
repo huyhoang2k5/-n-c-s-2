@@ -34,4 +34,9 @@ class HangHoa extends Model
     {
         return $this->hasMany(ChiTietHangHoa::class, 'ma_hang_hoa', 'ma_hang_hoa');
     }
+
+    public function getChiTietXuatKho()
+    {
+        return $this->hasManyThrough(ChiTietXuatKho::class, ChiTietHangHoa::class, 'ma_hang_hoa', 'id_chi_tiet_hang_hoa', 'ma_hang_hoa', 'id');
+    }
 }

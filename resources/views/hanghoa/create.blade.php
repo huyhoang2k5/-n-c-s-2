@@ -107,7 +107,7 @@
                                                             <div class="image-upload-wrap d-flex flex-column align-items-center">
                                                                 <div class="media media-huge border">
                                                                     <img id="img" class="w-100 h-100"
-                                                                        src="{{ asset('images/avatar/avatar-placeholder.jpg') }}" alt="img">
+                                                                        src="{{ asset('storage/images/hanghoa/hanghoa.jpg') }}" alt="img">
                                                                 </div>
                                                                 <div class="pt-3">
                                                                     <input class="upload-image" data-target="img" id="change-img" name="change_img"

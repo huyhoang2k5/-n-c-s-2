@@ -37,12 +37,18 @@ class NhaCungCapController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $data = $request->validate([
+            'ma_ncc' => 'required|unique:nha_cung_cap,ma_ncc',
+            'ten_ncc' => 'required',
+            'id_trang_thai' => 'required',
+            'sdt' => 'required|regex:/(0)[0-9]{9}/',
+            'dia_chi' => 'string'
+        ]);
 
         $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
 
         $nha_cung_cap = NhaCungCap::firstOrCreate([
-            'ma_ncc' => $data['ma_ncc']
+            'ma_ncc' => $data['ma_ncc'],
         ],
         [
             'ma_ncc' => $data['ma_ncc'],
@@ -50,7 +56,7 @@ class NhaCungCapController extends Controller
             'dia_chi' => $data['dia_chi'],
             'sdt' => $data['sdt'],
             'id_trang_thai' => $data['id_trang_thai'] ?? 3,
-            'mo_ta' => $mo_ta
+            'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
 
         if ($nha_cung_cap->wasRecentlyCreated) {
@@ -108,7 +114,7 @@ class NhaCungCapController extends Controller
 
         $nha_cung_cap = NhaCungCap::where('ma_ncc', $code)->first();
 
-        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Nhà cung cấp này chưa có mô tả cụ thể!';
+        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
 
         $status = $nha_cung_cap->update([
             'ma_ncc' => $data['ma_ncc'],
@@ -117,7 +123,7 @@ class NhaCungCapController extends Controller
             'sdt' => $data['sdt'],
             'id_trang_thai' => $data['id_trang_thai'],
             'mo_ta' => $file_name,
-            'mo_ta' => $mo_ta
+            'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
 
         if ($status) {

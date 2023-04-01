@@ -36,18 +36,28 @@
                                                 <div class="card-body">
                                                     <div class="row g-gs">
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"><label for="ma_phieu_nhap" class="form-label">Mã phiếu nhập</label>
+                                                            <div class="form-group">
+                                                                <label for="ma_phieu_nhap" class="form-label">Mã phiếu nhập</label>
                                                                 <div class="form-control-wrap">
                                                                     <input style="width:100%" type="text" minlength="1" maxlength="255" class="form-control"
                                                                         id="ma_phieu_nhap" value="{{ $ma_phieu_nhap }}" disabled>
                                                                 </div>
+                                                                @if ($errors)
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('ma_phieu_nhap') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"> <label for="ngay_nhap" class="form-label">Ngày nhập kho</label>
-                                                                <div class="form-control-wrap"> <input style="width:100%" placeholder="yyyy/mm/dd" type="date"
-                                                                        class="form-control" name="ngay_nhap" value="{{ old('ngay_nhap') }}" id="ngay_nhap"
-                                                                        required> </div>
+                                                            <div class="form-group">
+                                                                <label for="ngay_nhap" class="form-label">Ngày nhập kho</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input style="width:100%" placeholder="yyyy/mm/dd" type="date" class="form-control"
+                                                                        name="ngay_nhap" value="{{ old('ngay_nhap') }}" id="ngay_nhap" required>
+                                                                </div>
+                                                                @if ($errors)
+                                                                    <span
+                                                                        class="text-danger py-1 mt-2">{{ $errors->first('ngay_nhap') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
@@ -60,6 +70,10 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
+                                                                @if ($errors)
+                                                                    <span
+                                                                        class="text-danger py-1 mt-2">{{ $errors->first('ma_ncc') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">

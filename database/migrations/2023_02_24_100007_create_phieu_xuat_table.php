@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('phieu_xuat', function (Blueprint $table) {
             $table->id();
-            $table->char('ma_phieu_xuat');
+            $table->char('ma_phieu_xuat')->unique();
             $table->string('khach_hang');
             $table->text('dia_chi');
             $table->date('ngay_xuat')->default(now()->toDateString());

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PhieuNhap;
+use App\Models\NhapKho;
 use App\Models\ChiTietHangHoa;
 use App\Models\HangHoa;
 use App\Models\NhaCungCap;
@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Validators\ValidationException;
 use Carbon\Carbon;
 
 
-class PhieuNhapController extends Controller
+class NhapKhoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,7 +22,7 @@ class PhieuNhapController extends Controller
     public function index()
     {
         $nha_cung_cap = NhaCungCap::get();
-        $ma_phieu_nhap = PhieuNhap::latest()->first()->ma_phieu_nhap ?? "PN000000";
+        $ma_phieu_nhap = NhapKho::latest()->first()->ma_phieu_nhap ?? "PN000000";
 
         $lastNumber = (int) substr($ma_phieu_nhap, 2);
         $lastNumberLength = strlen((string)substr($ma_phieu_nhap, 2));
@@ -31,7 +31,7 @@ class PhieuNhapController extends Controller
 
         $phieu_nhap = [];
 
-        PhieuNhap::orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$phieu_nhap) {
+        NhapKho::orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$phieu_nhap) {
             foreach ($chunk as $phieu) {
                 $phieu_nhap[] = $phieu;
             }
@@ -47,7 +47,7 @@ class PhieuNhapController extends Controller
     {
         $hang_hoa = HangHoa::get();
         $nha_cung_cap = NhaCungCap::get();
-        $ma_phieu_nhap = PhieuNhap::latest()->first()->ma_phieu_nhap ?? "PN000000";
+        $ma_phieu_nhap = NhapKho::latest()->first()->ma_phieu_nhap ?? "PN000000";
 
         $lastNumber = (int) substr($ma_phieu_nhap, 2);
         $lastNumberLength = strlen((string)substr($ma_phieu_nhap, 2));
@@ -63,15 +63,15 @@ class PhieuNhapController extends Controller
      */
     public function show($code)
     {
-        $phieu_nhap = PhieuNhap::where('ma_phieu_nhap', $code)->firstOrFail();
+        $phieu_nhap = NhapKho::where('ma_phieu_nhap', $code)->firstOrFail();
 
-        $chi_tiet_phieu_nhap = [];
+        $chi_tiet_phieu_nhap = ChiTietHangHoa::where('ma_phieu_nhap', $code)->get();
 
-        ChiTietHangHoa::where('ma_phieu_nhap', $code)->orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$chi_tiet_phieu_nhap) {
-            foreach ($chunk as $chi_tiet) {
-                $chi_tiet_phieu_nhap[] = $chi_tiet;
-            }
+        $tong = $chi_tiet_phieu_nhap->sum(function($h) {
+            return $h->so_luong_goc * $h->gia_nhap;
         });
+
+        $phieu_nhap->tong = $tong;
 
         return view('nhapkho.show', compact('phieu_nhap', 'chi_tiet_phieu_nhap'));
     }
@@ -79,20 +79,25 @@ class PhieuNhapController extends Controller
 
     public function import(ExcelRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validate([
+            'ma_phieu_nhap' => 'required',
+            'ngay_nhap' => 'required',
+            'ma_ncc' => 'required'
+        ]);
 
         $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
         $dt = Carbon::now('Asia/Ho_Chi_Minh');
 
-        $phieu_nhap = PhieuNhap::firstOrCreate([
+        $phieu_nhap = NhapKho::firstOrCreate([
             'ma_phieu_nhap' => $data['ma_phieu_nhap'],
         ], [
             'ma_phieu_nhap' => $data['ma_phieu_nhap'],
             'ngay_nhap' => $data['ngay_nhap'] ?? $dt->toDateString(),
             'ma_ncc' => $data['ma_ncc'],
             'id_user' => auth()->user()->id,
-            'mo_ta' => $mo_ta ?? 'Không có mô tả cụ thể!'
+            'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
+
 
         try {
             $file = $request->file('excel_file');
@@ -108,8 +113,8 @@ class PhieuNhapController extends Controller
             return redirect()->route('nhap-kho.index')->with(['status' => 'Thêm dữ liệu từ file Excel thành công!!!', 'type' => 'success']);
 
         } catch(ValidationException $e) {
-            PhieuNhap::delete($phieu_nhap->id);
-            $ct_hang_hoa->truncate();
+            NhapKho::delete($phieu_nhap->id);
+            ChiTietHangHoa::where('ma_phieu_nhap', $data['ma_phieu_nhap'])->delete();
 
             $failures = $e->failures();
             $errors = [];
@@ -119,5 +124,10 @@ class PhieuNhapController extends Controller
 
             return back()->with(['errors' => $errors, 'status' => 'Xuất hiện lỗi trong khi thêm dữ liệu từ file Excel!', 'type' => 'danger']);
         }
+    }
+
+    public function destroy($code)
+    {
+
     }
 }

@@ -14,6 +14,6 @@ class HangHoaTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('hang_hoa')->truncate();
-        \App\Models\HangHoa::factory()->count(200)->create();
+        \App\Models\HangHoa::factory()->count(50)->create();
     }
 }

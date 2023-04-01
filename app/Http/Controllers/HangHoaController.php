@@ -18,17 +18,16 @@ class HangHoaController extends Controller
     public function index()
     {
         $hang_hoa = [];
-        $title = "Quản lý hàng hóa";
 
         HangHoa::orderBy('id')->chunkById(100, function ($chunk) use (&$hang_hoa) {
             foreach ($chunk as $hang) {
-                if ($hang->getLoaiHang->trang_thai != 1) {
+                if ($hang->getLoaiHang->id_trang_thai != 1) {
                     $hang_hoa[] = $hang;
                 }
             }
         });
 
-        return view('hanghoa.index', compact('hang_hoa', 'title'));
+        return view('hanghoa.index', compact('hang_hoa'));
     }
 
     /**
@@ -37,9 +36,8 @@ class HangHoaController extends Controller
     public function create()
     {
         $loai_hang = LoaiHang::where('id_trang_thai', 3)->get();
-        $title = "Thêm mới hàng hóa";
 
-        return view('hanghoa.create', compact('loai_hang', 'title'));
+        return view('hanghoa.create', compact('loai_hang'));
     }
 
     /**
@@ -56,7 +54,7 @@ class HangHoaController extends Controller
             $path = $request->file('change_img')->storeAs('public/images/hanghoa', $file_name);
         }
 
-        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Hàng hóa này chưa có mô tả cụ thể!';
+        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
 
         $hang_hoa = HangHoa::firstOrCreate([
             'ma_hang_hoa' => $data['ma_hang_hoa']
@@ -68,7 +66,7 @@ class HangHoaController extends Controller
             'don_vi_tinh' => $data['don_vi_tinh'],
             'barcode' => $data['barcode'] ?? '',
             'img' => $file_name,
-            'mo_ta' => $mo_ta
+            'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
 
         if ($hang_hoa->wasRecentlyCreated) {
@@ -87,11 +85,15 @@ class HangHoaController extends Controller
     public function show($code)
     {
         $hang_hoa = HangHoa::where('ma_hang_hoa', $code)->firstOrFail();
-        $title = $hang_hoa->ten_hang_hoa;
 
         if ($hang_hoa) {
-            $chi_tiet_hang_hoa = ChiTietHangHoa::where('ma_hang_hoa', $code)->where('trang_thai', 3)->get()->sortByDesc('id')->all();
-            return view('hanghoa.show', compact('hang_hoa', 'chi_tiet_hang_hoa', 'title'));
+            $chi_tiet_hang_hoa = ChiTietHangHoa::where('ma_hang_hoa', $code)->where('id_trang_thai', 3)->get();
+            $tong = $chi_tiet_hang_hoa->sum(function($h) {
+                return $h->gia_nhap * $h->so_luong;
+            });
+            $hang_hoa->tong = $tong;
+
+            return view('hanghoa.show', compact('hang_hoa', 'chi_tiet_hang_hoa'));
         } else {
             return back()->with(['status' => 'Không tìm thấy hàng hóa, xin vui lòng thử lại sau!', 'type' => 'danger']);
         }
@@ -104,10 +106,9 @@ class HangHoaController extends Controller
     {
         $loai_hang = LoaiHang::where('id_trang_thai', 3)->get();
         $hang_hoa = HangHoa::where('ma_hang_hoa', $code)->firstOrFail();
-        $title = "Sửa thông tin " . $hang_hoa->ten_hang_hoa;
 
         if ($hang_hoa) {
-            return view('hanghoa.edit', compact('hang_hoa', 'loai_hang', 'title'));
+            return view('hanghoa.edit', compact('hang_hoa', 'loai_hang'));
         } else {
             return back()->with(['status' => 'Không tìm thấy hàng hóa, xin vui lòng thử lại sau!', 'type' => 'danger']);
         }
@@ -129,7 +130,7 @@ class HangHoaController extends Controller
             $path = $request->file('change_img')->storeAs('public/images/hanghoa', $hang_hoa->img);
         }
 
-        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Hàng hóa này chưa có mô tả cụ thể!';
+        $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
 
         $status = $hang_hoa->update([
             'ma_hang_hoa' => $data['ma_hang_hoa'],
@@ -138,7 +139,7 @@ class HangHoaController extends Controller
             'don_vi_tinh' => $data['don_vi_tinh'],
             'barcode' => $data['barcode'],
             'img' => $hang_hoa->img,
-            'mo_ta' => $mo_ta
+            'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
 
         if ($status) {

@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
-use App\Models\PhieuXuat;
-use App\Models\ChiTietPhieuXuat;
+use App\Models\XuatKho;
+use App\Models\ChiTietXuatKho;
 use App\Models\ChiTietHangHoa;
 use App\Models\HangHoa;
-use App\Exports\PhieuXuatExport;
+use App\Exports\XuatKhoExport;
 
-class PhieuXuatController extends Controller
+class XuatKhoController extends Controller
 {
     public function search(Request $request)
     {
@@ -40,42 +40,52 @@ class PhieuXuatController extends Controller
     {
         $data = json_decode($request->getContent(), true);
 
-        if (count($data) > 1) {
-            $mo_ta = json_decode($data[0]['mo_ta'], true) ?? 'Chưa có mô tả cụ thể!';
+        $validator = Validator::make($data[0], [
+            'ma_phieu_xuat' => 'required|max:20|unique:phieu_xuat,ma_phieu_xuat',
+            'ngay_xuat' => 'required',
+            'id_user' => 'required|integer',
+            'khach_hang' => 'required|string',
+        ]);
 
-            $phieu_xuat = PhieuXuat::firstOrCreate(
-                ['ma_phieu_xuat' => $data[0]['ma_phieu_xuat']],
-                [
+        if ($validator->fails()) {
+            return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Vui lòng tải lại trang!']);
+        } else {
+            $phieu_xuat = XuatKho::create([
                 'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
                 'khach_hang' => $data[0]['khach_hang'],
                 'dia_chi' => $data[0]['dia_chi'],
                 'ngay_xuat' => $data[0]['ngay_xuat'],
                 'id_user' => $data[0]['id_user'],
-                'mo_ta' => $mo_ta
+                'mo_ta' => strlen($data[0]['mo_ta']) == 0 ? 'Không có mô tả cụ thể!' : $data[0]['mo_ta']
             ]);
 
-            if ($phieu_xuat->wasRecentlyCreated) {
+            if (count($data) > 1) {
+                for ($i = 1; $i < count($data); $i++) {
+                    $cthh = ChiTietHangHoa::find($data[$i]['id_hang_hoa']);
+
+                    if (($cthh->so_luong - $data[$i]['so_luong']) >= 0) {
+                        ChiTietXuatKho::create([
+                            'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
+                            'id_chi_tiet_hang_hoa' => $data[$i]['id_hang_hoa'],
+                            'so_luong' => $data[$i]['so_luong'],
+                            'gia_xuat' => $data[$i]['gia']
+                        ]);
+                    } else {
+                        return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình xuất dữ liệu. Vui lòng kiểm tra và thử lại!']);
+                    }
+                }
 
                 for ($i = 1; $i < count($data); $i++) {
                     $cthh = ChiTietHangHoa::find($data[$i]['id_hang_hoa']);
                     $cthh->so_luong -= $data[$i]['so_luong'];
-                    $cthh->so_luong == 0 ?? $cthh->trang_thai = 1;
+                    $cthh->so_luong == 0 ? $cthh->trang_thai = 1 : $cthh->so_luong;
                     $cthh->save();
-
-                    ChiTietPhieuXuat::create([
-                        'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
-                        'id_chi_tiet_hang_hoa' => $data[$i]['id_hang_hoa'],
-                        'so_luong' => $data[$i]['so_luong'],
-                        'gia_xuat' => $data[$i]['gia']
-                    ]);
                 }
 
                 return response()->json(['message'=> 'Xuất kho thành công. Bạn sẽ được chuyển hướng sau vài giây!', 'type' => 'success', 'redirect' => route('xuat-kho.index')], 200);
             }
 
-            return response()->json(['status'=> 'Mã phiếu xuất đã tồn tại. Vui lòng tải lại trang để được nhận mã phiểu mới!']);
+            return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình xuất dữ liệu. Vui lòng kiểm tra và thử lại!']);
         }
-
-        return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình xuất dữ liệu. Vui lòng kiểm tra và thử lại!']);
     }
 }

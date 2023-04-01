@@ -9,13 +9,11 @@
                     <div class="nk-block-head">
                         <div class="nk-block-head-between flex-wrap gap g-2">
                             <div class="nk-block-head-content">
-                                <h2 class="nk-block-title">Quản lý xuất kho</h2>
+                                <h2 class="nk-block-title">Quản lý tài khoản</h2>
                                 <nav>
                                     <ol class="breadcrumb breadcrumb-arrow mb-0">
-                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
-                                        </li>
-                                        <li class="breadcrumb-item active" aria-current="page">Quản lý xuất
-                                            kho</li>
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Quản lý tài khoản</li>
                                     </ol>
                                 </nav>
                             </div>
@@ -128,17 +126,4 @@
 @endsection
 
 @section('script')
-    <script src="{{ asset('assets/js/libs/editors/quill.js') }}"></script>
-    <script>
-        const quill = new Quill('#quill_editor', {
-            theme: 'snow'
-        });
-        const form = document.querySelector('#form-create');
-        form.onsubmit = function(e) {
-            const mo_ta = document.querySelector('input[name=mo_ta]');
-            mo_ta.value = JSON.stringify(quill.getContents());
-
-            return true;
-        };
-    </script>
 @endsection
