@@ -22,12 +22,14 @@ class ThongKeExport implements FromArray, WithHeadings, ShouldAutoSize
         foreach ($this->data as $key => $row) {
             $result[] = [
                 $key+1,
+                $row->ten_loai_hang,
                 $row->ma_hang_hoa,
                 $row->ten_hang_hoa,
+                $row->ton_kho,
                 $row->get_chi_tiet_sum_so_luong,
                 $row->get_chi_tiet_sum_gia_nhap,
-                $row->get_chi_tiet_phieu_xuat_sum_so_luong,
-                $row->get_chi_tiet_phieu_xuat_sum_gia_xuat,
+                $row->get_chi_tiet_xuat_kho_sum_so_luong,
+                $row->get_chi_tiet_xuat_kho_sum_gia_xuat,
                 $row->lai,
             ];
         }
@@ -38,8 +40,10 @@ class ThongKeExport implements FromArray, WithHeadings, ShouldAutoSize
     {
         return [
             'STT',
+            'Loại hàng',
             'Mã hàng hóa',
             'Tên hàng hóa',
+            'Tồn kho',
             'Nhập',
             'Tổng giá trị',
             'Xuất',

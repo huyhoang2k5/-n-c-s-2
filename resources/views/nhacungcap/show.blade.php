@@ -18,6 +18,15 @@
                                     </ol>
                                 </nav>
                             </div>
+                            <div class="nk-block-head-content">
+                                @can('user')
+                                    <ul class="d-flex">
+                                        <li><a href="{{ route('nha-cung-cap.edit', $nha_cung_cap->ma_ncc) }}" class="btn btn-primary d-md-inline-flex"><em
+                                                    class="icon ni ni-edit"></em><span>Sửa nhà cung cấp</span></a>
+                                        </li>
+                                    </ul>
+                                @endcan
+                            </div>
                         </div>
                     </div>
                     <div class="nk-block">
@@ -55,16 +64,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    use Carbon\Carbon;
-                                                    $result = 0;
-                                                @endphp
-
                                                 @foreach ($chi_tiet_hang_hoa as $key => $chi_tiet)
-                                                    @php
-                                                        $price = $chi_tiet->so_luong_goc * $chi_tiet->gia_nhap;
-                                                        $result += $price;
-                                                    @endphp
                                                     <tr>
                                                         <td class="tb tb-col">{{ $key + 1 }}</td>
                                                         <td class="tb-col">
@@ -77,10 +77,10 @@
                                                         <td class="tb-col"><span>{{ number_format($chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span></td>
                                                         <td class="tb-col">
                                                             <span>
-                                                                {{ Carbon::createFromFormat('Y-m-d', $chi_tiet->getPhieuNhap->ngay_nhap)->format('d-m-Y') }}</span>
+                                                                {{ \Carbon\Carbon::createFromFormat('Y-m-d', $chi_tiet->getNhapKho->ngay_nhap)->format('d-m-Y') }}</span>
                                                         </td>
                                                         <td class="tb-col tb-col-end">
-                                                            <span>{{ number_format($price, 0, '', '.') }} VNĐ</span>
+                                                            <span>{{ number_format($chi_tiet->so_luong_goc * $chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -90,12 +90,13 @@
                                                     <td class="tb-col-md" colspan="4"></td>
                                                     <td colspan="">Tổng:</td>
                                                     <td colspan="1"></td>
-                                                    <td class="tb-col tb-col-end">{{ number_format($result, 0, '', ',') }} VNĐ</td>
+                                                    <td class="tb-col tb-col-end">{{ number_format($nha_cung_cap->tong, 0, '', ',') }} VNĐ</td>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
                                 </div>
+                                @include('parts.paginate', ['paginator' => $chi_tiet_hang_hoa])
                             </div>
                         </div>
                     </div>

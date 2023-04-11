@@ -33,6 +33,7 @@ class ThongKeController extends Controller
         $hang_hoa = HangHoa::when($ma_ten, function ($query, $ma_ten) {
             return $query->where('ten_hang_hoa', 'like', "%{$ma_ten}%")->orWhere('ma_hang_hoa', 'like', "%{$ma_ten}%");
         })
+        ->has('getChiTiet')
         ->when($from_date, function ($query, $from_date) {
             return $query->whereDate('created_at', '>=', $from_date);
         })
@@ -41,18 +42,11 @@ class ThongKeController extends Controller
         })
         ->withSum(['getChiTiet' => function ($query) {
             $query->selectRaw('so_luong_goc');
-        }], 'so_luong')
-        ->withSum(['getChiTiet' => function ($query) {
-            $query->selectRaw('gia_nhap');
-        }], 'gia_nhap')
+        }], 'so_luong_goc')
         ->withSum(['getChiTietXuatKho' => function ($query) {
             $query->selectRaw('so_luong');
         }], 'so_luong')
-        ->withSum(['getChiTietXuatKho' => function ($query) {
-            $query->selectRaw('gia_xuat');
-        }], 'gia_xuat')
         ->get();
-
 
         foreach ($hang_hoa as $hang) {
             $dt_nhap = $hang->getChiTiet->sum(function ($h) {
@@ -63,7 +57,25 @@ class ThongKeController extends Controller
                     return $h->so_luong * $h->gia_xuat;
             });
 
+            $ton_kho = $hang->getChiTiet->sum(function ($h) {
+                return $h->so_luong_goc - $h->so_luong;
+            });
+
+            $gia_xuat = $hang->getChiTietXuatKho->sum(function ($h) {
+                return $h->gia_xuat * $h->so_luong;
+            });
+
+            $gia_nhap = $hang->getChiTiet->sum(function ($h) {
+                return $h->gia_nhap * $h->so_luong_goc;
+            });
+
+            $ten_loai_hang = $hang->getLoaiHang->ten_loai_hang;
+
             $hang['lai'] = $dt_xuat - $dt_nhap;
+            $hang['ten_loai_hang'] = $ten_loai_hang;
+            $hang['ton_kho'] = $ton_kho;
+            $hang->gia_xuat = $gia_xuat;
+            $hang->gia_nhap = $gia_nhap;
         }
 
 

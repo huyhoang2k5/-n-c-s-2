@@ -156,6 +156,7 @@
     </div>
 @endsection
 
+
 @section('script')
     <script src="{{ asset('assets/js/libs/editors/quill.js') }}"></script>
     <script>

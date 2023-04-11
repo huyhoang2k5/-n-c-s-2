@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('dia_chi');
             $table->date('ngay_xuat')->default(now()->toDateString());
             $table->text('mo_ta')->nullable();
-            $table->foreignId('id_user')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('id_user')->nullable()->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

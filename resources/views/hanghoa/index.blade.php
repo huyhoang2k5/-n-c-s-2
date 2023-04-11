@@ -24,10 +24,22 @@
                             <div class="nk-block-head-content">
                                 @can('user')
                                     <ul class="d-flex">
-                                        <li><a href="{{ route('hang-hoa.create') }}" class="btn btn-primary btn-md d-md-none"><em
-                                                    class="icon ni ni-plus"></em><span>Thêm</span></a></li>
-                                        <li><a href="{{ route('hang-hoa.create') }}" class="btn btn-primary d-none d-md-inline-flex"><em
-                                                    class="icon ni ni-plus"></em><span>Thêm hàng hóa</span></a>
+                                        <li>
+                                            <form id="form-import" enctype="multipart/form-data">
+                                                <label for="import-excel" class="btn btn-primary d-md-inline-flex" style="margin-right: 10px">
+                                                    <em class="icon ni ni-file-xls"></em>
+                                                    <span>
+                                                        Import
+                                                    </span>
+                                                </label>
+                                                <input type="file" name="excel_file" id="import-excel" accept=".xlsx,.xls" hidden>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('hang-hoa.create') }}" class="btn btn-primary d-md-inline-flex">
+                                                <em class="icon ni ni-plus"></em>
+                                                <span>Thêm hàng hóa</span>
+                                            </a>
                                         </li>
                                     </ul>
                                 @endcan
@@ -63,7 +75,7 @@
                                                 <div class="media-group">
                                                     <div class="media media-lg media-middle"><img src="{{ asset('storage/images/hanghoa/' . $hang->img) }}"
                                                             alt="img"></div>
-                                                    <div class="media-text" >
+                                                    <div class="media-text">
                                                         <a href="{{ route('hang-hoa.show', $hang->ma_hang_hoa) }}"
                                                             class="title">{{ strlen($hang->ten_hang_hoa) > 20 ? substr($hang->ten_hang_hoa, 0, 20) . '...' : substr($hang->ten_hang_hoa, 0, 20) }}</a>
                                                     </div>
@@ -94,7 +106,7 @@
                                                                     <li><a href="{{ route('hang-hoa.edit', $hang->ma_hang_hoa) }}"><em
                                                                                 class="icon ni ni-edit"></em><span>Sửa</span></a>
                                                                     </li>
-                                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#xoa_hang_hoa"><em
+                                                                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#xoahanghoa{{ $hang->id }}"><em
                                                                                 class="icon ni ni-trash"></em><span>Xóa</span></a>
                                                                     </li>
                                                                 @endcan
@@ -108,8 +120,8 @@
                                             </td>
                                         </tr>
                                         @can('user')
-                                            <div class="modal fade" id="xoa_hang_hoa" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scrollableLabel"
-                                                aria-hidden="true">
+                                            <div class="modal fade" id="xoahanghoa{{ $hang->id }}" data-bs-keyboard="false" tabindex="-1"
+                                                aria-labelledby="scrollableLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-top">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -147,11 +159,58 @@
     </div>
 @endsection
 
+
 @section('script')
     <script>
         $(document).ready(function() {
+            $('input[name="excel_file"]').change(function() {
+                $('#form-import').submit();
+            });
 
+            $('#form-import').on('submit', function(e) {
+                e.preventDefault();
+                let formData = new FormData(this);
 
+                $.ajax({
+                    url: '{{ route('api.them-hang.import') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.type === 'success') {
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: response.message,
+                                icon: 'success',
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Thất bại!',
+                                text: response.message,
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function(response) {
+                        var errors = response.responseJSON.errors;
+                        var errorText = '';
+
+                        $.each(errors, function(index, error) {
+                            $.each(error, function(key, value) {
+                                errorText += value + "\n";
+                            })
+                        })
+
+                        alert(errorText);
+                    }
+                })
+
+            })
         })
     </script>
 @endsection

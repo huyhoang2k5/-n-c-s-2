@@ -356,7 +356,7 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Get all items except for those with the specified keys.
      *
-     * @param  \Illuminate\Support\Enumerable<array-key, TKey>|array<array-key, TKey>  $keys
+     * @param  \Illuminate\Support\Enumerable<array-key, TKey>|array<array-key, TKey>|string  $keys
      * @return static
      */
     public function except($keys)
@@ -456,9 +456,11 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     /**
      * Get an item from the collection by key or add it to collection if it does not exist.
      *
+     * @template TGetOrPutValue
+     *
      * @param  mixed  $key
-     * @param  mixed  $value
-     * @return mixed
+     * @param  TGetOrPutValue|(\Closure(): TGetOrPutValue)  $value
+     * @return TValue|TGetOrPutValue
      */
     public function getOrPut($key, $value)
     {
@@ -1565,6 +1567,16 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
         $this->items = $this->map($callback)->all();
 
         return $this;
+    }
+
+    /**
+     * Flatten a multi-dimensional associative array with dots.
+     *
+     * @return static
+     */
+    public function dot()
+    {
+        return new static(Arr::dot($this->all()));
     }
 
     /**

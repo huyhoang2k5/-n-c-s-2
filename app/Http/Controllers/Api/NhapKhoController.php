@@ -52,7 +52,7 @@ class NhapKhoController extends Controller
                         'ma_hang_hoa' => $data[$i]['ma_hang_hoa'],
                         'so_luong' => $data[$i]['so_luong'],
                         'so_luong_goc' => $data[$i]['so_luong'],
-                        'trang_thai' => 3,
+                        'id_trang_thai' => 3,
                         'gia_nhap' => $data[$i]['gia_nhap'],
                         'ngay_san_xuat' => $data[$i]['ngay_san_xuat'],
                         'tg_bao_quan' => $data[$i]['tg_bao_quan'],
@@ -71,19 +71,39 @@ class NhapKhoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function add(Request $request)
     {
-        //
+        $data = json_decode($request->getContent(), true);
+
+        $validator = Validator::make($data[0], [
+            'ten_hang_hoa' => 'required|max:255',
+            'ma_hang_hoa' => 'required|max:100|unique:hang_hoa,ma_hang_hoa',
+            'id_loai_hang' => 'required|integer',
+            'don_vi_tinh' => 'required|max:50',
+            'barcode' => 'max:100, unique:hang_hoa,barcode'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Vui lòng thử lại!']);
+        } else {
+            $hang_hoa = HangHoa::create([
+                'ma_hang_hoa' => $data[0]['ma_hang_hoa'],
+                'ten_hang_hoa' => $data[0]['ten_hang_hoa'],
+                'id_loai_hang' => $data[0]['id_loai_hang'],
+                'don_vi_tinh' => $data[0]['don_vi_tinh'],
+                'barcode' => $data[0]['barcode'] == '' ? null : $data[0]['barcode'],
+                'img' => "hanghoa.jpg",
+                'mo_ta' => strlen($data[0]['mo_ta']) == 0 ? 'Không có mô tả cụ thể!' : $data[0]['mo_ta']
+            ]);
+
+            if ($hang_hoa) {
+                return response()->json(['message' => 'Thêm mới hàng hóa thành công!', 'type' => 'success']);
+            } else {
+                return response()->json(['message' => 'Thêm mới thất bại do đã tồn tại hàng hóa từ trước hoặc do lỗi!']);
+            }
+        }
     }
 
     /**

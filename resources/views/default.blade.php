@@ -5,12 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{-- <title>Laravel</title> --}}
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? 'Quản lý kho' }}</title>
+    <title>Quản lý kho</title>
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -38,21 +36,8 @@
                     @include('parts.header')
 
                     <div class="nk-content">
-                        @include('sweetalert::alert')
 
                     @endauth
-
-                    @if (session('status'))
-                        <div class="alert alert-{{ session('type') }}" id="{{ session('type') }}">
-                            {{ session('status') }}
-                        </div>
-                        <script>
-                            setTimeout(function() {
-                                document.getElementById("{{ session('type') }}").style.display = "none";
-                            }, 5000); // 5000 milliseconds = 5 seconds
-                        </script>
-                    @endif
-
 
                     @yield('content')
 
@@ -72,11 +57,94 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.min.js"
         integrity="sha512-EKWWs1ZcA2ZY9lbLISPz8aGR2+L7JVYqBAYTq5AXgBkSjRSuQEGqWx8R1zAX16KdXPaCjOCaKE8MCpU0wcHlHA==" crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
-    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @include('sweetalert::alert')
 
-    {{-- Editor --}}
-    {{-- <script src="{{ asset('assets/js/libs/editors/quill.js') }}"></script>
-    <script src="{{ asset('assets/js/editors/quill.js') }}"></script> --}}
+    {{-- <script>
+        const bell = document.querySelector('.ni-bell')
+
+        intervalId = setInterval(function() {
+            bell.classList.toggle('notified')
+        }, 800);
+
+        function GetData() {
+            $.ajax({
+                url: '',
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                success: function(data) {
+                    let intervalId = null
+                    bell = document.querySelector('.ni-bell')
+                    let alertElement = document.querySelector('.nk-schedule')
+
+                    while (alertElement.firstChild) {
+                        alertElement.removeChild(alertElement.firstChild);
+                    }
+
+                    if (data['data'].length > 0) {
+
+                        intervalId = setInterval(function() {
+                            bell.classList.toggle('notified')
+                        }, 1000);
+
+
+                        data['data'].forEach(e => {
+                            const dateObj = new Date(e.created_at)
+                            const now = new Date()
+
+                            const timeDiff = now.getTime() - dateObj.getTime()
+                            let timeAgo
+
+                            if (timeDiff < 60 * 1000) {
+                                timeAgo = Math.floor(timeDiff / 1000) + ' giây trước';
+                            } else if (timeDiff < 60 * 60 * 1000) {
+                                const minutesDiff = Math.floor(timeDiff / (60 * 1000));
+                                const secondsDiff = Math.floor((timeDiff - (minutesDiff * 60 * 1000)) / 1000);
+                                timeAgo = minutesDiff + ' phút ' + secondsDiff + ' giây trước';
+                            } else if (timeDiff < 60 * 60 * 1000 * 24) {
+                                const hoursDiff = Math.floor(timeDiff / (60 * 60 * 1000));
+                                const minutesDiff = Math.floor((timeDiff - (hoursDiff * 60 * 60 * 1000)) / (60 * 1000));
+                                timeAgo = hoursDiff + ' giờ ' + minutesDiff + ' phút trước';
+                            } else {
+                                const daysDiff = Math.floor(timeDiff / (60 * 60 * 1000 * 24))
+                                timeAgo = daysDiff + ' ngày trước'
+                            }
+
+                            const element = document.createElement('div')
+
+                            element.innerHTML = `
+                                            <li class="nk-schedule-item">
+                                                <div class="nk-schedule-item-inner">
+                                                    <div class="nk-schedule-symbol active"></div>
+                                                    <div class="nk-schedule-content"><span class="smaller">${timeAgo}</span>
+                                                        <div class="h6"><a href="/${e.id}"><span>Bạn có 1 đơn hàng mới từ ${e.ten_khach}</span></a></div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            `
+
+                            alertElement.appendChild(element)
+                        })
+                    } else {
+                        clearInterval(intervalId);
+                        bell.classList.remove('notified')
+                    }
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) { // hàm được gọi khi yêu cầu thất bại
+                    console.log(errorThrown);
+                }
+            });
+        }
+        GetData()
+
+        setInterval(function() {
+            GetData()
+        }, 60000)
+    </script> --}}
 
     @yield('script')
 </body>

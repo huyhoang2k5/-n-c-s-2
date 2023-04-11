@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\NhaCungCap;
 use App\Models\ChiTietHangHoa;
 use App\Models\TrangThai;
@@ -14,10 +15,9 @@ class NhaCungCapController extends Controller
      */
     public function index()
     {
-        $title = "Quản lý nhà cung cấp";
         $nha_cung_cap = NhaCungCap::get();
 
-        return view('nhacungcap.index', compact('nha_cung_cap', 'title'));
+        return view('nhacungcap.index', compact('nha_cung_cap'));
     }
 
     /**
@@ -25,11 +25,10 @@ class NhaCungCapController extends Controller
      */
     public function create()
     {
-        $title = "Thêm mới nhà cung cấp";
         $trang_thai = TrangThai::get();
         $nha_cung_cap = NhaCungCap::get();
 
-        return view('nhacungcap.create', compact('trang_thai', 'title', 'nha_cung_cap'));
+        return view('nhacungcap.create', compact('trang_thai', 'nha_cung_cap'));
     }
 
     /**
@@ -39,18 +38,15 @@ class NhaCungCapController extends Controller
     {
         $data = $request->validate([
             'ma_ncc' => 'required|unique:nha_cung_cap,ma_ncc',
-            'ten_ncc' => 'required',
-            'id_trang_thai' => 'required',
-            'sdt' => 'required|regex:/(0)[0-9]{9}/',
-            'dia_chi' => 'string'
+            'ten_ncc' => 'required|max:255',
+            'id_trang_thai' => 'required|integer',
+            'sdt' => 'required|regex:/^(0)[0-9]{9}$/',
+            'dia_chi' => 'string|max:255',
         ]);
 
         $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
 
-        $nha_cung_cap = NhaCungCap::firstOrCreate([
-            'ma_ncc' => $data['ma_ncc'],
-        ],
-        [
+        $nha_cung_cap = NhaCungCap::create([
             'ma_ncc' => $data['ma_ncc'],
             'ten_ncc' => $data['ten_ncc'],
             'dia_chi' => $data['dia_chi'],
@@ -59,10 +55,12 @@ class NhaCungCapController extends Controller
             'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
 
-        if ($nha_cung_cap->wasRecentlyCreated) {
-            return redirect()->route('nha-cung-cap.index')->with(['status' => 'Thêm mới nhà cung cấp thành công!', 'type' => 'success']);
+        if ($nha_cung_cap) {
+            Alert::success('Thành công', 'Thêm mới nhà cung cấp thành công!');
+            return redirect()->route('nha-cung-cap.index');
         } else {
-            return redirect()->back()->with(['status' => 'Thêm mới thất bại do đã tồn tại nhà cung cấp từ trước hoặc do lỗi!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Thêm mới thất bại do đã tồn tại nhà cung cấp từ trước hoặc do lỗi!')->autoClose(5000);
+            return back();
         }
     }
 
@@ -72,13 +70,19 @@ class NhaCungCapController extends Controller
     public function show($code)
     {
         $nha_cung_cap = NhaCungCap::where('ma_ncc', $code)->first();
-        $chi_tiet_hang_hoa = ChiTietHangHoa::where('ma_ncc', $code)->get()->sortByDesc('id')->all();
-        $title = "Xem thông tin " . $nha_cung_cap->ten_ncc;
+        $chi_tiet_hang_hoa = ChiTietHangHoa::where('ma_ncc', $code)->paginate(10);
+
+        $tong = $chi_tiet_hang_hoa->sum(function($h) {
+            return $h->so_luong_goc * $h->gia_nhap;
+        });
+
+        $nha_cung_cap->tong = $tong;
 
         if ($nha_cung_cap) {
-            return view('nhacungcap.show', compact('nha_cung_cap', 'title', 'chi_tiet_hang_hoa'));
+            return view('nhacungcap.show', compact('nha_cung_cap', 'chi_tiet_hang_hoa'));
         } else {
-            return back()->with(['status' => 'Không tìm thấy nhà cung cấp, xin vui lòng thử lại sau!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Không tìm thấy nhà cung cấp, xin vui lòng thử lại sau!')->autoClose(5000);
+            return back();
         }
     }
 
@@ -88,13 +92,13 @@ class NhaCungCapController extends Controller
     public function edit($code)
     {
         $nha_cung_cap = NhaCungCap::where('ma_ncc', $code)->first();
-        $title = "Sửa thông tin " . $nha_cung_cap->ten_ncc;
         $trang_thai = TrangThai::get();
 
         if ($nha_cung_cap) {
-            return view('nhacungcap.edit', compact('nha_cung_cap', 'trang_thai', 'title'));
+            return view('nhacungcap.edit', compact('nha_cung_cap', 'trang_thai'));
         } else {
-            return back()->with(['status' => 'Không tìm thấy nhà cung cấp, xin vui lòng thử lại sau!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Không tìm thấy nhà cung cấp, xin vui lòng thử lại sau!')->autoClose(5000);
+            return back();
         }
     }
 
@@ -104,7 +108,11 @@ class NhaCungCapController extends Controller
     public function update(Request $request, $code)
     {
         $request->validate([
-            'sdt' => 'required|regex:/(0)[0-9]{9}/'
+            'ma_ncc' => 'required|max:50',
+            'ten_ncc' => 'required|max:255',
+            'id_trang_thai' => 'required|integer',
+            'dia_chi' => 'string|max:255',
+            'sdt' => 'required|regex:/^(0)[0-9]{9}$/'
         ], [
             'sdt.required' => 'Bạn cần thêm số điện thoại!',
             'sdt.regex' => 'Định dạng số điện thoại không đúng.'
@@ -122,14 +130,15 @@ class NhaCungCapController extends Controller
             'dia_chi' => $data['dia_chi'],
             'sdt' => $data['sdt'],
             'id_trang_thai' => $data['id_trang_thai'],
-            'mo_ta' => $file_name,
             'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
 
         if ($status) {
-            return redirect()->route('nha-cung-cap.index')->with(['status' => 'Sửa thông tin nhà cung cấp thành công!', 'type' => 'success']);
+            Alert::success('Thành công', 'Sửa thông tin nhà cung cấp thành công!');
+            return redirect()->route('nha-cung-cap.index');
         } else {
-            return back()->with(['status' => 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!')->autoClose(5000);
+            return back();
         }
     }
 
@@ -141,9 +150,11 @@ class NhaCungCapController extends Controller
         $status = NhaCungCap::destroy($id);
 
         if ($status) {
-            return redirect()->route('nha-cung-cap.index')->with(['status' => 'Xóa nhà cung cấp thành công', 'type' => 'success']);
+            Alert::success('Thành công', 'Xóa thông tin nhà cung cấp thành công!');
+            return redirect()->route('nha-cung-cap.index');
         } else{
-            return back()->with(['status' => 'Có lỗi trong quá trình xóa. Xin vui lòng thử lại!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Có lỗi trong quá trình xóa. Xin vui lòng thử lại!')->autoClose(5000);
+            return back();
         }
     }
 }

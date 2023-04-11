@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\LoaiHang;
 use App\Models\HangHoa;
 use App\Models\TrangThai;
@@ -16,7 +17,6 @@ class LoaiHangController extends Controller
      */
     public function index()
     {
-        $title = "Quản lý loại hàng";
         $loai_hang = [];
 
         LoaiHang::orderBy('id')->chunkById(100, function ($chunk) use (&$loai_hang) {
@@ -25,7 +25,7 @@ class LoaiHangController extends Controller
             }
         });
 
-        return view('loaihang.index', compact('loai_hang', 'title'));
+        return view('loaihang.index', compact('loai_hang'));
     }
 
     /**
@@ -33,10 +33,9 @@ class LoaiHangController extends Controller
      */
     public function create()
     {
-        $title = 'Thêm mới loại hàng';
         $trang_thai = TrangThai::get();
 
-        return view('loaihang.create', compact('trang_thai', 'title'));
+        return view('loaihang.create', compact('trang_thai'));
     }
 
     /**
@@ -48,19 +47,18 @@ class LoaiHangController extends Controller
 
         $mo_ta = json_decode($request->mo_ta)->ops[0]->insert ?? 'Loại hàng này chưa có mô tả cụ thể!';
 
-        $status = LoaiHang::firstOrCreate([
-            'ten_loai_hang' => $data['ten_loai_hang']
-        ],
-        [
+        $status = LoaiHang::create([
             'ten_loai_hang' => $data['ten_loai_hang'],
             'id_trang_thai' => $data['id_trang_thai'] ?? 3,
             'mo_ta' => $mo_ta
         ]);
 
         if ($status) {
-            return redirect()->route('loai-hang.index')->with(['status' => 'Thêm mới loại hàng thành công!', 'type' => 'success']);
+            Alert::success('Thành công', 'Thêm mới loại hàng thành công!');
+            return redirect()->route('loai-hang.index');
         } else {
-            return back()->with(['status' => 'Thêm mới loại hàng thất bại do lỗi hoặc đã tồn tại trước đó', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Thêm mới loại hàng thất bại do lỗi hoặc đã tồn tại trước đó!')->autoClose(5000);
+            return back();
         }
     }
 
@@ -69,14 +67,14 @@ class LoaiHangController extends Controller
      */
     public function show($id)
     {
-        $loai_hang = LoaiHang::findOrFail($id);
-        $title = $loai_hang->ten_loai_hang;
+        $loai_hang = LoaiHang::find($id);
         $hang_hoa = HangHoa::where('id_loai_hang', $id)->get();
 
         if ($loai_hang) {
-            return view('loaihang.show', compact('loai_hang', 'hang_hoa', 'title'));
+            return view('loaihang.show', compact('loai_hang', 'hang_hoa'));
         } else {
-            return back()->with(['status' => 'Không tìm thấy loại hàng, xin vui lòng thử lại!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Không tìm thấy loại hàng, xin vui lòng thử lại!')->autoClose(5000);
+            return back();
         }
     }
 
@@ -86,10 +84,9 @@ class LoaiHangController extends Controller
     public function edit($id)
     {
         $loai_hang = LoaiHang::findOrFail($id);
-        $title = "Sửa thông tin " . $loai_hang->ten_loai_hang;
         $trang_thai = TrangThai::get();
 
-        return view('loaihang.edit', compact('loai_hang', 'trang_thai', 'title'));
+        return view('loaihang.edit', compact('loai_hang', 'trang_thai'));
     }
 
     /**
@@ -108,9 +105,11 @@ class LoaiHangController extends Controller
         ]);
 
         if ($status) {
-            return redirect()->route('loai-hang.index')->with(['status' => 'Sửa thông tin loại hàng thành công!', 'type' => 'success']);
+            Alert::success('Thành công', 'Sửa thông tin loại hàng thành công!');
+            return redirect()->route('loai-hang.index');
         } else {
-            return back()->with(['status' => 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Có lỗi trong quá trình chỉnh sửa. Xin vui lòng thử lại!')->autoClose(5000);
+            return back();
         }
     }
 
@@ -122,9 +121,11 @@ class LoaiHangController extends Controller
         $status = LoaiHang::destroy($id);
 
         if ($status) {
-            return redirect()->action([LoaiHangController::class, 'index'])->with(['status' => 'Xóa loại hàng hóa thành công', 'type' => 'success']);
+            Alert::success('Thành công', 'Xóa loại hàng hóa thành công!');
+            return redirect()->route('loai-hang.index');
         } else{
-            return back()->with(['status' => 'Có lỗi trong quá trình xóa. Xin vui lòng thử lại!', 'type' => 'danger']);
+            Alert::error('Thất bại', 'Có lỗi trong quá trình xóa. Xin vui lòng thử lại!')->autoClose(5000);
+            return back();
         }
     }
 }

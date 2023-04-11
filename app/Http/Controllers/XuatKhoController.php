@@ -7,8 +7,9 @@ use App\Models\ChiTietXuatKho;
 use App\Models\ChiTietHangHoa;
 use App\Exports\XuatKhoExport;
 use Maatwebsite\Excel\Facades\Excel;
-
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class XuatKhoController extends Controller
 {
@@ -66,13 +67,7 @@ class XuatKhoController extends Controller
     {
         $phieu_xuat = XuatKho::where('ma_phieu_xuat', $code)->firstOrFail();
 
-        $chi_tiet_phieu_xuat = [];
-
-        ChiTietXuatKho::where('ma_phieu_xuat', $code)->orderBy('id', 'DESC')->chunkById(100, function ($chunk) use (&$chi_tiet_phieu_xuat) {
-            foreach ($chunk as $chi_tiet) {
-                $chi_tiet_phieu_xuat[] = $chi_tiet;
-            }
-        });
+        $chi_tiet_phieu_xuat = ChiTietXuatKho::where('ma_phieu_xuat', $code)->orderBy('id', 'DESC')->paginate(10);
 
         return view('xuatkho.show', compact('phieu_xuat', 'chi_tiet_phieu_xuat'));
     }
@@ -81,68 +76,110 @@ class XuatKhoController extends Controller
     {
         $data = json_decode($request->getContent(), true);
         $dataExport = [];
+        $errors = [];
 
-        try {
-            if (count($data) > 1) {
-                $mo_ta = json_decode($data[0]['mo_ta'], true) ?? 'Chưa có mô tả cụ thể!';
+        if (count($data) < 2) {
+            return response()->json(['message'=> 'Không có dữ liệu để xuất!']);
+        }
 
-                $phieu_xuat = XuatKho::firstOrCreate(
-                    ['ma_phieu_xuat' => $data[0]['ma_phieu_xuat']],
-                    [
-                    'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
-                    'khach_hang' => $data[0]['khach_hang'],
-                    'dia_chi' => $data[0]['dia_chi'],
-                    'ngay_xuat' => $data[0]['ngay_xuat'],
-                    'id_user' => $data[0]['id_user'],
-                    'mo_ta' => $mo_ta
-                ]);
+        $validator = Validator::make($data[0], [
+            'ma_phieu_xuat' => 'required|max:20|unique:phieu_xuat,ma_phieu_xuat',
+            'ngay_xuat' => 'required',
+            'id_user' => 'required|integer',
+            'khach_hang' => 'required',
+            'dia_chi' => 'required',
+        ]);
 
-                if ($phieu_xuat->wasRecentlyCreated) {
+        if ($validator->fails()) {
+            foreach ($validator->errors()->messages() as $rowErrors) {
+                $errors[] = $rowErrors;
+            }
+        }
 
-                    for ($i = 1; $i < count($data); $i++) {
-                        $cthh = ChiTietHangHoa::find($data[$i]['id_hang_hoa']);
-                        $hh = HangHoa::where('ma_hang_hoa', $cthh->ma_hang_hoa)->first();
+        if ($validator->fails()) {
+            return response()->json(['message'=> 'Có lỗi xảy ra trong quá trình nhập dữ liệu. Vui lòng thử lại sau!', 'errors' => $errors], 400);
+        }
 
-                        ChiTietXuatKho::create([
-                            'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
-                            'id_chi_tiet_hang_hoa' => $data[$i]['id_hang_hoa'],
-                            'so_luong' => $data[$i]['so_luong'],
-                            'gia_xuat' => $data[$i]['gia']
-                        ]);
+        $mo_ta = json_decode($data[0]['mo_ta'], true);
 
-                        $item = [];
-                        $item[] = $i;
-                        $item[] = $cthh->ma_hang_hoa;
-                        $item[] = $hh->ten_hang_hoa;
-                        $item[] = $hh->don_vi_tinh;
-                        $item[] = $data[$i]['so_luong'];
-                        $item[] = $data[$i]['gia'];
-                        $item[] = $data[$i]['so_luong'] * $data[$i]['gia'];
+        $phieu_xuat = XuatKho::create([
+            'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
+            'khach_hang' => $data[0]['khach_hang'],
+            'dia_chi' => $data[0]['dia_chi'],
+            'ngay_xuat' => $data[0]['ngay_xuat'],
+            'id_user' => $data[0]['id_user'],
+            'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
+        ]);
 
-                        $dataExport[] = $item;
+        for ($i = 1; $i < count($data); $i++) {
+            $validator = Validator::make($data[$i], [
+                'id_chi_tiet_hang_hoa' => 'required|integer|exists:chi_tiet_hang_hoa,id',
+                'so_luong' => 'required|integer|min:1',
+                'gia_xuat' => 'required|numeric|min:0',
+            ]);
 
-                        $cthh->so_luong -= $data[$i]['so_luong'];
-                        $cthh->so_luong == 0 ?? $cthh->id_trang_thai = 1;
-                        $cthh->save();
-                    }
-
-                    $excel = Excel::download(new XuatKhoExport($dataExport), 'xuat-kho.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-
-                    $excelPath = $excel->getFile()->getPathname();
-                    \Storage::disk('public')->put('excel/xuat-kho.xlsx', file_get_contents($excelPath));
-
-                    return response()->json(['type' => 'export', 'message' => 'Xuất file excel thành công. Bạn có muốn tải về không?', 'downloadUrl' => route('xuat-kho.download')]);
+            if ($validator->fails()) {
+                foreach ($validator->errors()->messages() as $rowErrors) {
+                    $errors[] = $rowErrors;
                 }
-
-                XuatKho::delete($phieu_xuat->id);
-
-                return response()->json(['message'=> 'Mã phiếu xuất đã tồn tại. Vui lòng tải lại trang để được nhận mã phiểu mới!']);
             }
 
-        } catch (\Throwable $th) {
+            $cthh = ChiTietHangHoa::find($data[$i]['id_chi_tiet_hang_hoa']);
 
-            return back()->with(['message'=> 'Có lỗi xảy ra trong quá trình xuất dữ liệu. Vui lòng kiểm tra và thử lại!']);
+            if (($cthh->so_luong - $data[$i]['so_luong']) < 0) {
+                $errors[] = "Số lượng nhập vào của " . $cthh->getHangHoa->ten_hang_hoa . " vượt quá số lượng hiện có trong kho.";
+            }
         }
+
+        if (count($errors) > 0) {
+            XuatKho::destroy($phieu_xuat->id);
+            return response()->json(['errors' => $errors], 400);
+        }
+
+        $dataExport = collect($data)
+        ->skip(1)
+        ->map(function($item, $index) use ($data) {
+            $cthh = ChiTietHangHoa::find($item['id_chi_tiet_hang_hoa']);
+            $hh = HangHoa::where('ma_hang_hoa', $cthh->ma_hang_hoa)->first();
+
+            ChiTietXuatKho::create([
+                'ma_phieu_xuat' => $data[0]['ma_phieu_xuat'],
+                'id_chi_tiet_hang_hoa' => $item['id_chi_tiet_hang_hoa'],
+                'so_luong' => $item['so_luong'],
+                'gia_xuat' => $item['gia_xuat']
+            ]);
+
+            $gia_xuat = $item['so_luong'] * $item['gia_xuat'];
+
+            $cthh->so_luong -= $item['so_luong'];
+            $cthh->so_luong == 0 ? $cthh->id_trang_thai = 1 : $cthh->so_luong;
+            $cthh->save();
+
+            return [
+                $index,
+                $cthh->ma_hang_hoa,
+                $hh->ten_hang_hoa,
+                $hh->don_vi_tinh,
+                $item['so_luong'],
+                $item['gia_xuat'],
+                $gia_xuat,
+                Carbon::createFromFormat('Y-m-d', $cthh->ngay_san_xuat)->format('d-m-Y'),
+                $cthh->tg_bao_quan,
+                $cthh->getNhaCungCap->ten_ncc,
+            ];
+        })
+        ->toArray();
+
+        $excel = Excel::download(new XuatKhoExport($dataExport), 'xuat-kho.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+
+        $excelPath = $excel->getFile()->getPathname();
+        \Storage::disk('public')->put('excel/xuat-kho.xlsx', file_get_contents($excelPath));
+
+        return response()->json([
+            'type' => 'export',
+            'message' => 'Xuất file excel thành công. Bạn có muốn tải về không?',
+            'downloadUrl' => route('xuat-kho.download')
+        ]);
     }
 
     public function download()

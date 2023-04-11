@@ -108,7 +108,7 @@
                                                 </li>
                                                 <li style="margin-left: 10px">
                                                     <button id="btn-export" type="submit" class="btn btn-primary d-md-inline-flex">
-                                                        <em class="icon ni ni-plus"></em>
+                                                        <em class="icon ni ni-file-download"></em>
                                                         <span>Export</span>
                                                     </button>
                                                 </li>
@@ -192,7 +192,7 @@
                     $.ajax({
                         url: "{{ route('api.xuat-kho.search') }}",
                         data: {
-                            searchInput: request.term, // dữ liệu nhập vào\
+                            searchInput: request.term, // dữ liệu nhập vào
                             selectedValues: selectedValues
                         },
                         dataType: "json",
@@ -324,9 +324,9 @@
 
                 $('tbody tr').each(function() {
                     const item = {
-                        id_hang_hoa: $(this).find('.hang-hoa').val(),
+                        id_chi_tiet_hang_hoa: $(this).find('.hang-hoa').val(),
                         so_luong: $(this).find('.so-luong').val(),
-                        gia: $(this).find('.gia').val()
+                        gia_xuat: $(this).find('.gia').val()
                     }
                     data.push(item);
                 });
@@ -370,15 +370,20 @@
                             }).catch((error) => {
                                 console.log(error);
                             });
-                        } else {
-                            Swal.fire({
-                                title: 'Thất bại!',
-                                text: response.message,
-                                confirmButtonColor: '#fc0303',
-                            })
                         }
                     },
-                    error: function(xhr, status, error) {}
+                    error: function(response) {
+                        var errors = response.responseJSON.errors;
+                        var errorText = '';
+
+                        $.each(errors, function(index, error) {
+                            $.each(error, function(key, value) {
+                                errorText += value + "\n";
+                            })
+                        })
+
+                        alert(errorText);
+                    }
                 });
 
                 return true

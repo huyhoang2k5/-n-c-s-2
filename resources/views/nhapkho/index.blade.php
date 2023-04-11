@@ -35,7 +35,7 @@
                                     </li>
                                     <li style="margin-left: 10px">
                                         <a href="#" class="btn btn-primary d-md-inline-flex" data-bs-toggle="modal" data-bs-target="#nhap_excel">
-                                            <em class="icon ni ni-plus"></em>
+                                            <em class="icon ni ni-file-xls"></em>
                                             <span>Import</span>
                                         </a>
                                     </li>
@@ -51,7 +51,7 @@
                                         <th class="tb-col"><span class="overline-title">STT</span></th>
                                         <th class="tb-col"><span class="overline-title">Mã phiếu</span></th>
                                         <th class="tb-col"><span class="overline-title">Người nhập</span></th>
-                                        <th class="tb-col"><span class="overline-title">Ngày nhập</span></th>
+                                        <th class="tb-col" data-type="date" data-format="DD-MM-YYYY"><span class="overline-title">Ngày nhập</span></th>
                                         <th class="tb-col tb-col-end"><span class="overline-title">Hành động</span></th>
                                     </tr>
                                 </thead>

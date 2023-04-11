@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('id_loai_hang')->constrained('loai_hang')->cascadeOnDelete();
             $table->string('don_vi_tinh');
             $table->integer('barcode')->nullable();
-            $table->string('img')->nullable();
+            $table->char('img')->nullable();
             $table->timestamps();
         });
     }

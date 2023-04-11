@@ -35,7 +35,7 @@
                                                             <div class="form-group">
                                                                 <label for="ma_hang_hoa" class="form-label">Mã hàng hóa</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" id="ten_hang_hoa" name="ma_hang_hoa"
+                                                                    <input type="text" class="form-control" id="ma_hang_hoa" name="ma_hang_hoa"
                                                                         value="{{ old('ma_hang_hoa') }}" placeholder="Mã hàng hóa"  maxlength="100">
                                                                 </div>
                                                                 @if ($errors)
@@ -81,7 +81,7 @@
                                                         </div>
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
-                                                                <label class="form-label">Chi tiết</label>
+                                                                <label class="form-label">Mô tả</label>
                                                                 <div class="form-control-wrap">
                                                                     <div class="js-quill" id="quill_editor" value="{!! old('mo_ta') !!}" data-toolbar="minimal"
                                                                         data-placeholder="Viết chi tiết sản phẩm vào đây...">
@@ -129,8 +129,7 @@
                                                                 <option value="">Loại hàng hóa</option>
                                                                 @foreach ($loai_hang as $loai)
                                                                     <option value="{{ $loai->id }}"
-                                                                        {{ old('id_loai_hang') == $loai->id ? 'selected' : '' }}>
-                                                                        {{ $loai->ten_loai_hang }}</option>
+                                                                        {{ old('id_loai_hang') == $loai->id ? 'selected' : '' }}>{{ $loai->ten_loai_hang }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -159,6 +158,7 @@
         </div>
     </div>
 @endsection
+
 
 @section('script')
     <script src="{{ asset('assets/js/libs/editors/quill.js') }}"></script>

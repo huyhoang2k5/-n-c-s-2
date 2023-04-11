@@ -23,40 +23,28 @@ class ChiTietHangHoaImport implements ToModel, WithChunkReading, WithHeadingRow,
     {
         $this->ma_phieu_nhap = $ma_phieu_nhap;
     }
-    ////////////////////////////////////////////////////////////
+    
 
     public function setTrangThai($trang_thai)
     {
         $this->trang_thai = $trang_thai;
     }
-    ///////////////////////////////////////////////////////////
+
 
     public function setNhaCungCap($ma_ncc)
     {
         $this->ma_ncc = $ma_ncc;
     }
-    ///////////////////////////////////////////////////////////
+
 
     public function headingRow() : int
     {
         return 1;
     }
-    //////////////////////////////////////////////////////
+
 
     public function model(array $row)
     {
-        Validator::make($row, [
-            '*.ma_phieu_nhap' => 'required',
-            '*.ma_hang_hoa' => 'required',
-            '*.ma_ncc' => 'required',
-            '*.so_luong' => 'required',
-            '*.so_luong_goc' => 'required',
-            '*.trang_thai' => 'required',
-            '*.gia_nhap' => 'required',
-            '*.ngay_san_xuat' => 'required',
-            '*.tg_bao_quan' => 'required',
-        ])->validate();
-
         $row['ma_phieu_nhap'] = $this->ma_phieu_nhap;
         $row['trang_thai'] = $this->trang_thai;
         $row['ma_ncc'] = $this->ma_ncc;

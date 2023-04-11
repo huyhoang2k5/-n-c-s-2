@@ -6,6 +6,7 @@ use App\Models\NhapKho;
 use App\Models\ChiTietHangHoa;
 use App\Models\HangHoa;
 use App\Models\NhaCungCap;
+use App\Models\LoaiHang;
 use Illuminate\Http\Request;
 use App\Http\Requests\ExcelRequest;
 use App\Imports\ChiTietHangHoaImport;
@@ -46,7 +47,8 @@ class NhapKhoController extends Controller
     public function create()
     {
         $hang_hoa = HangHoa::get();
-        $nha_cung_cap = NhaCungCap::get();
+        $nha_cung_cap = NhaCungCap::where('id_trang_thai', '!=', 1)->get();
+        $loai_hang = LoaiHang::get();
         $ma_phieu_nhap = NhapKho::latest()->first()->ma_phieu_nhap ?? "PN000000";
 
         $lastNumber = (int) substr($ma_phieu_nhap, 2);
@@ -55,7 +57,7 @@ class NhapKhoController extends Controller
         $ma_phieu_nhap = 'PN' . str_pad($nextNumber, $lastNumberLength, '0', STR_PAD_LEFT);
 
 
-        return view('nhapkho.create', compact('ma_phieu_nhap', 'hang_hoa', 'nha_cung_cap'));
+        return view('nhapkho.create', compact('ma_phieu_nhap', 'hang_hoa', 'nha_cung_cap', 'loai_hang'));
     }
 
     /**
@@ -65,7 +67,7 @@ class NhapKhoController extends Controller
     {
         $phieu_nhap = NhapKho::where('ma_phieu_nhap', $code)->firstOrFail();
 
-        $chi_tiet_phieu_nhap = ChiTietHangHoa::where('ma_phieu_nhap', $code)->get();
+        $chi_tiet_phieu_nhap = ChiTietHangHoa::where('ma_phieu_nhap', $code)->paginate(10);
 
         $tong = $chi_tiet_phieu_nhap->sum(function($h) {
             return $h->so_luong_goc * $h->gia_nhap;
@@ -79,11 +81,15 @@ class NhapKhoController extends Controller
 
     public function import(ExcelRequest $request)
     {
-        $data = $request->validate([
+        $data = Validator::make($request->all(), [
             'ma_phieu_nhap' => 'required',
             'ngay_nhap' => 'required',
             'ma_ncc' => 'required'
         ]);
+
+        if ($data->fails()) {
+
+        }
 
         $mo_ta = json_decode($request->mo_ta)->ops[0]->insert;
         $dt = Carbon::now('Asia/Ho_Chi_Minh');
@@ -97,7 +103,6 @@ class NhapKhoController extends Controller
             'id_user' => auth()->user()->id,
             'mo_ta' => strlen($mo_ta) == 0 ? 'Không có mô tả cụ thể!' : $mo_ta
         ]);
-
 
         try {
             $file = $request->file('excel_file');

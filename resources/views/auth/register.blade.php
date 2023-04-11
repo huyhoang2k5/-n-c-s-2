@@ -50,7 +50,7 @@
                             <div class="col-12">
                                 <div class="form-group"><label for="password" class="form-label">Password</label>
                                     <div class="form-control-wrap"><input id="password" type="password"
-                                            class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password"
+                                            class="form-control @error('password') is-invalid @enderror" name="password" required
                                             placeholder="Enter password"></div>
 
                                     @error('password')
@@ -64,7 +64,7 @@
                             <div class="col-12">
                                 <div class="form-group"><label for="password-confirm" class="form-label">Password confirm</label>
                                     <div class="form-control-wrap"><input id="password-confirm" type="password" class="form-control" name="password_confirmation"
-                                            required autocomplete="new-password" placeholder="Enter password"></div>
+                                            required placeholder="Enter password"></div>
 
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">

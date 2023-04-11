@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ThongKeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +24,7 @@ use App\Http\Controllers\RegisterController;
 */
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('hang-hoa')->group(function () {
         Route::get('/', [HangHoaController::class, 'index'])->name('hang-hoa.index');
@@ -79,7 +78,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('profile')->group(function () {
         Route::get('/', [UserController::class, 'show'])->name('user.show');
         Route::post('/doi-mat-khau', [UserController::class, 'updatePassword'])->name('user.updatePassword');
-        Route::post('/doi-thong-tin', [UserController::class, 'updateProfile'])->name('user.updateProfile');
+        Route::put('/doi-thong-tin', [UserController::class, 'updateProfile'])->name('user.updateProfile');
     });
 
     Route::prefix('thong-ke')->group(function () {
@@ -89,11 +88,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('tai-khoan')->middleware('can:user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('tai-khoan.index');
+        Route::get('/them-tai-khoan', [RegisterController::class, 'showRegiserForm'])->name('register');
+        Route::post('/them-tai-khoan', [RegisterController::class, 'register']);
+        Route::put('/{id}', [UserController::class, 'changeRole'])->name('user.changeRole');
+        Route::get('/xem/{id}', [UserController::class, 'showUser'])->name('tai-khoan.showUser');
+        Route::delete('/xoa/{id}', [UserController::class, 'delete'])->name('tai-khoan.delete');
     });
 });
 
 Route::get('/dang-nhap', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/dang-nhap', [LoginController::class, 'login']);
 Route::post('/dang-xuat', [LoginController::class, 'logout'])->name('logout');
-Route::get('/dang-ky', [RegisterController::class, 'showRegiserForm'])->name('register')->middleware('can:user');
-Route::post('/dang-ky', [RegisterController::class, 'register'])->middleware('can:user');

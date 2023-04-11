@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('loai_hang', function (Blueprint $table) {
             $table->id();
             $table->string('ten_loai_hang');
-            $table->integer('id_trang_thai')->default(3);
+            $table->foreignId('id_trang_thai')->constrained('trang_thai')->cascadeOnDelete();
             $table->text('mo_ta')->nullable();
             $table->timestamps();
         });

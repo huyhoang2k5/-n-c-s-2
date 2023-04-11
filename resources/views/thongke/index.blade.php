@@ -20,7 +20,7 @@
                                 <ul class="d-flex">
                                     <li>
                                         <a href="{{ route('thong-ke.export', ['data' => $data->toJson()]) }}" class="btn btn-primary d-md-inline-flex">
-                                            <em class="icon ni ni-plus"></em>
+                                            <em class="icon ni ni-file-download"></em>
                                             <span>Export excel</span>
                                         </a>
                                     </li>
@@ -125,10 +125,10 @@
                                                         href="{{ route('hang-hoa.show', $tk->ma_hang_hoa) }}">{{ strlen($tk->ten_hang_hoa) > 20 ? substr($tk->ten_hang_hoa, 0, 20) . '...' : substr($tk->ten_hang_hoa, 0, 20) }}</a>
                                                 </div>
                                             </td>
-                                            <td class="tb-col"><span> {{ $tk->get_chi_tiet_sum_so_luong }}</span></td>
-                                            <td class="tb-col"><span> {{ number_format($tk->get_chi_tiet_sum_gia_nhap, 0, '', '.') }} VNĐ</span></td>
-                                            <td class="tb-col"><span> {{ $tk->get_chi_tiet_phieu_xuat_sum_so_luong }}</span></td>
-                                            <td class="tb-col"><span> {{ number_format($tk->get_chi_tiet_phieu_xuat_sum_gia_xuat, 0, '', '.') }} VNĐ</span></td>
+                                            <td class="tb-col"><span> {{ $tk->get_chi_tiet_sum_so_luong_goc }}</span></td>
+                                            <td class="tb-col"><span> {{ number_format($tk->gia_nhap, 0, '', '.') }} VNĐ</span></td>
+                                            <td class="tb-col"><span> {{ $tk->get_chi_tiet_xuat_kho_sum_so_luong }}</span></td>
+                                            <td class="tb-col"><span> {{ number_format($tk->gia_xuat, 0, '', '.') }} VNĐ</span></td>
                                             <td class="tb-col tb-col-end"><span> {{ number_format($tk->lai, 0, '', '.') }} VNĐ</span></td>
                                         </tr>
                                     @endforeach

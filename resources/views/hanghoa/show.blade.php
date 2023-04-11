@@ -64,7 +64,7 @@
                 </div>
                 <div class="nk-block">
                     <div class="card">
-                        <table class="datatable-init table" data-nk-container="table-responsive" id="hang-hoa">
+                        <table class="table" data-nk-container="table-responsive" id="hang-hoa">
                             <thead class="table-light">
                                 <tr>
                                     <th class="tb-col"><span class="overline-title">STT</span></th>
@@ -72,27 +72,48 @@
                                     <th class="tb-col"><span class="overline-title">Giá nhập</span></th>
                                     <th class="tb-col"><span class="overline-title">Ngày sản xuất</span></th>
                                     <th class="tb-col"><span class="overline-title">Bảo quản(tháng)</span>
+                                    <th class="tb-col"><span class="overline-title">Hạn sử dụng</span>
                                     <th class="tb-col"><span class="overline-title">Thành tiền</span>
                                     </th>
                                     <th class="tb-col tb-col-end" data-sortable="false"><span class="overline-title">Hành động</span></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    use Carbon\Carbon;
+                                @endphp
                                 @foreach ($chi_tiet_hang_hoa as $key => $chi_tiet)
+                                    @php
+                                        $gia_nhap = number_format($chi_tiet->gia_nhap, 0, '', '.');
+                                        $thanh_tien = number_format($chi_tiet->so_luong * $chi_tiet->gia_nhap, 0, '', '.');
+                                        $date = Carbon::parse($chi_tiet->ngay_san_xuat);
+                                        $date->addMonths($chi_tiet->tg_bao_quan);
+                                        $diffDays = Carbon::now()->diffInDays($date, false);
+                                        $ngay_san_xuat = Carbon::createFromFormat('Y-m-d', $chi_tiet->ngay_san_xuat)->format('d-m-Y');
+                                    @endphp
                                     <tr>
                                         <td class="tb-col">
                                             <span>{{ $key + 1 }}</span>
                                         </td>
                                         <td class="tb-col"><span>{{ $chi_tiet->so_luong }}</span></td>
-                                        <td class="tb-col"><span>{{ number_format($chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span></td>
+                                        <td class="tb-col"><span>{{ $gia_nhap }} VNĐ</span></td>
                                         <td class="tb-col">
-                                            <span>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $chi_tiet->ngay_san_xuat)->format('d-m-Y') }}</span>
+                                            <span>{{ $ngay_san_xuat }}</span>
                                         </td>
                                         <td class="tb-col">
                                             <span>{{ $chi_tiet->tg_bao_quan }}</span>
                                         </td>
                                         <td class="tb-col">
-                                            <span class="tb-col">{{ number_format($chi_tiet->so_luong * $chi_tiet->gia_nhap, 0, '', '.') }} VNĐ</span>
+                                            @if ($diffDays > 30)
+                                                <span class="badge text-bg-success-soft">Còn {{ $diffDays }} ngày</span>
+                                            @elseif ($diffDays <= 30 && $diffDays > 0)
+                                                <span class="badge text-bg-warning-soft">Còn {{ $diffDays }} ngày</span>
+                                            @else
+                                                <span class="badge text-bg-danger-soft">Hết hạn {{ abs($diffDays) }} ngày</span>
+                                            @endif
+                                        </td>
+                                        <td class="tb-col">
+                                            <span class="tb-col">{{ $thanh_tien }} VNĐ</span>
                                         </td>
                                         <td class="tb-col tb-col-end"><a class="btn btn-info btn-sm"
                                                 href="{{ route('nhap-kho.show', $chi_tiet->ma_phieu_nhap) }}"><em class="icon ni ni-eye"></em><span>Xem</span></a>
@@ -103,6 +124,7 @@
                         </table>
                     </div>
                 </div>
+                @include('parts.paginate', ['paginator' => $chi_tiet_hang_hoa])
             </div>
         </div>
     </div>

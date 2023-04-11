@@ -50,6 +50,8 @@
                                                     <th class="tb-col"><span class="overline-title">STT</span></th>
                                                     <th class="tb-col"><span class="overline-title">Mã hàng hóa</span></th>
                                                     <th class="tb-col"><span class="overline-title">Tên hàng hóa</span></th>
+                                                    <th class="tb-col"><span class="overline-title">NSX</span></th>
+                                                    <th class="tb-col"><span class="overline-title">Bảo quản(tháng)</span></th>
                                                     <th class="tb-col"><span class="overline-title">Số lượng</span></th>
                                                     <th class="tb-col"><span class="overline-title">Giá xuất</span></th>
                                                     <th class="tb-col tb-col-end"><span class="overline-title">Thành tiền</span></th>
@@ -75,6 +77,10 @@
                                                         <td class="tb-col">
                                                             <span>{{ $chi_tiet->getChiTiet->getHangHoa->ten_hang_hoa }}</span>
                                                         </td>
+                                                        <td class="tb-col">
+                                                            <span>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $chi_tiet->getChiTiet->ngay_san_xuat)->format('m/d/Y') }}</span>
+                                                        </td>
+                                                        <td class="tb-col"><span>{{ $chi_tiet->getChiTiet->tg_bao_quan }}</span></td>
                                                         <td class="tb-col"><span>{{ $chi_tiet->so_luong }}</span></td>
                                                         <td class="tb-col"><span>{{ number_format($chi_tiet->gia_xuat, 0, '', '.') }} VNĐ</span></td>
                                                         <td class="tb-col tb-col-end"><span>{{ number_format($price, 0, '', '.') }} VNĐ</span>
@@ -84,7 +90,7 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <td colspan="4"></td>
+                                                    <td colspan="5"></td>
                                                     <td colspan="">Tổng:</td>
                                                     <td class="tb-col tb-col-end">{{ number_format($result, 0, '', ',') }} VNĐ</td>
                                                 </tr>
@@ -92,6 +98,7 @@
                                         </table>
                                     </div>
                                 </div>
+                                @include('parts.paginate', ['paginator' => $chi_tiet_phieu_xuat])
                             </div>
                         </div>
                     </div>

@@ -45,7 +45,7 @@
                                         <th class="tb-col"><span class="overline-title">STT</span></th>
                                         <th class="tb-col"><span class="overline-title">Mã phiếu</span></th>
                                         <th class="tb-col"><span class="overline-title">Người xuất</span></th>
-                                        <th class="tb-col"><span class="overline-title">Ngày xuất</span></th>
+                                        <th class="tb-col" data-type="date" data-format="DD-MM-YYYY"><span class="overline-title">Ngày xuất</span></th>
                                         <th class="tb-col tb-col-end"><span class="overline-title">Hành động</span></th>
                                     </tr>
                                 </thead>

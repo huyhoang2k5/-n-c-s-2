@@ -22,16 +22,16 @@ class ExcelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'excel_file' => 'required|mimes:xls,xlsx|max:10240' // tệp Excel phải có định dạng xls hoặc xlsx, và kích thước không quá 10MB
+            'excel_file' => 'required|mimes:xls,xlsx|max:10240'
         ];
     }
 
     public function message()
     {
         return [
-            'excel_file.required' => 'Bạn chưa thêm file!',
-            'excel_file.mines' => 'Chỉ chấp nhận định dạng file là xls hoặc xlsx!',
-            'excel_file.max' => 'Dung lượng file tối đa có thể xử lý là 10mb!',
+            'excel_file.required' => 'Vui lòng chọn một tệp tin để tải lên',
+            'excel_file.mimes' => 'Tệp tin phải có định dạng xls hoặc xlsx',
+            'excel_file.max' => 'Tệp tin tải lên không được quá 10MB'
         ];
     }
 }

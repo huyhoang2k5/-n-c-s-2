@@ -1,7 +1,6 @@
 @extends('default')
 
 @section('content')
-
     <div class="nk-content">
         <div class="container">
             <div class="nk-content-inner">
@@ -12,114 +11,100 @@
                                 <h2 class="nk-block-title">Quản lý tài khoản</h2>
                                 <nav>
                                     <ol class="breadcrumb breadcrumb-arrow mb-0">
-                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Quản lý tài khoản</li>
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">Quản lý
+                                            tài khoản</li>
                                     </ol>
                                 </nav>
                             </div>
                             <div class="nk-block-head-content">
-                                <ul class="d-flex">
-                                    <li>
-                                        <a href="{{ route('xuat-kho.create') }}" class="btn btn-primary btn-md d-md-none">
-                                            <em class="icon ni ni-plus"></em>
-                                            <span>Xuất</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('xuat-kho.create') }}" class="btn btn-primary d-none d-md-inline-flex">
-                                            <em class="icon ni ni-plus"></em>
-                                            <span>Xuất kho</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                                @can('user')
+                                    <ul class="d-flex">
+                                        <li><a href="{{ route('register') }}" class="btn btn-primary d-md-inline-flex"><em class="icon ni ni-plus"></em><span>Thêm tài
+                                                    khoản</span></a>
+                                        </li>
+                                    </ul>
+                                @endcan
                             </div>
                         </div>
                     </div>
                     <div class="nk-block">
                         <div class="card">
-                            <table class="datatable-init table" data-nk-container="table-responsive">
+                            <table class="datatable-init table" data-nk-container="table-responsive" id="hang-hoa">
                                 <thead class="table-light">
                                     <tr>
                                         <th class="tb-col"><span class="overline-title">STT</span></th>
-                                        <th class="tb-col"><span class="overline-title">Mã phiếu</span></th>
-                                        <th class="tb-col"><span class="overline-title">Người xuất</span></th>
-                                        <th class="tb-col"><span class="overline-title">Ngày xuất</span></th>
-                                        <th class="tb-col tb-col-end"><span class="overline-title">Hành động</span></th>
+                                        <th class="tb-col"><span class="overline-title">Tên</span></th>
+                                        <th class="tb-col"><span class="overline-title">Gmail</span></th>
+                                        <th class="tb-col"><span class="overline-title">Role</span></th>
+                                        <th class="tb-col tb-col-end" data-sortable="false"><span class="overline-title">Hành động</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($phieu_xuat as $key => $phieu)
+
+                                    @foreach ($users as $key => $user)
                                         <tr>
-                                            <td class="tb-col"><span>{{ $key + 1 }}</span></td>
-                                            <td class="tb-col"><span>{{ $phieu->ma_phieu_xuat }}</span></td>
-                                            <td class="tb-col"><span>{{ $phieu->getUsers->name }}</span></td>
-                                            <td class="tb-col"><span> {{ \Carbon\Carbon::createFromFormat('Y-m-d', $phieu->ngay_xuat)->format('d-m-Y') }}
-                                                </span></td>
+                                            <td class="tb-col">
+                                                <span>{{ $key + 1 }}</span>
+                                            </td>
+                                            <td class="tb-col">
+                                                <div class="media-group">
+                                                    <div class="media media-lg media-middle"><img src="{{ asset('storage/images/user/' . $user->avatar) }}"></div>
+                                                    <div class="media-text">
+                                                        <a href="{{ route('tai-khoan.showUser', $user->id) }}" class="title">{{ $user->name }}</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="tb-col">
+                                                <span>{{ $user->email }}</span>
+                                            </td>
+                                            <td class="tb-col"><span>{{ $user->role_id == 1 ? 'Admin' : 'Nhân viên' }}</span></td>
                                             <td class="tb-col tb-col-end">
-                                                <a href="{{ route('xuat-kho.show', $phieu->ma_phieu_xuat) }}" class="btn btn-info btn-sm"><em
-                                                        class="icon ni ni-eye"></em><span>Xem</span></a>
+                                                <div class="dropdown">
+                                                    <a href="#" class="btn btn-sm btn-icon btn-zoom me-n1" data-bs-toggle="dropdown">
+                                                        <em class="icon ni ni-more-v"></em>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-end">
+                                                        <div class="dropdown-content py-1">
+                                                            <ul class="link-list link-list-hover-bg-primary link-list-md">
+                                                                <li><a href="#" data-bs-toggle="modal" data-bs-target="#xoataikhoan{{ $user->id }}"><em
+                                                                            class="icon ni ni-trash"></em><span>Xóa</span></a>
+                                                                </li>
+                                                                <li><a href="{{ route('tai-khoan.showUser', $user->id) }}"><em class="icon ni ni-eye"></em><span>Xem chi tiết</span></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
+
+                                        <div class="modal fade" id="xoataikhoan{{ $user->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scrollableLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-top">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="scrollableLabel">Bạn chắc chắc muốn xóa?</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">Đồng ý nghĩa là bạn muốn xóa toàn bộ dữ liệu liên quan tài khoản này!</div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <form method="POST" action="{{ route('tai-khoan.delete', $user->id) }}" id="delete-form">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button type="submit" class="btn btn-sm btn-primary">Đồng ý</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="xuat_excel" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scrollableLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-top">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="scrollableLabel">Nhập thông tin</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('xuat-kho.export') }}" method="POST" enctype="multipart/form-data" id="form-create">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row g-gs">
-                            <div class="col-lg-6">
-                                <div class="form-group"><label for="ma_phieu_xuat" class="form-label">Mã phiếu xuất</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" minlength="1" maxlength="255" class="form-control" id="ma_phieu_xuat" value="#{{ $ma_phieu_xuat }}"
-                                            disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group"> <label for="ngay_xuat" class="form-label">Ngày xuất</label>
-                                    <div class="form-control-wrap"> <input placeholder="yyyy/mm/dd" type="date" class="form-control" name="ngay_xuat"
-                                            value="{{ old('ngay_xuat') }}" id="ngay_xuat" required> </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label">Chi tiết</label>
-                                    <div class="form-control-wrap">
-                                        <div class="js-quill" id="quill_editor" value="{!! old('mo_ta') !!}" data-toolbar="minimal"
-                                            data-placeholder="Viết chi tiết sản phẩm vào đây...">
-                                        </div>
-                                        <input type="hidden" name="mo_ta">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <div class="input-group"><input type="file" class="form-control" name="excel_file" id="file" required></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-sm btn-primary">Đồng
-                            ý</button>
-                    </div>
-                    <input type="hidden" name="ma_phieu_xuat" value="{{ $ma_phieu_xuat }}">
-                </form>
             </div>
         </div>
     </div>

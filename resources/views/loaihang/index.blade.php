@@ -67,7 +67,7 @@
                                                                                 class="icon ni ni-edit"></em><span>Sửa</span></a>
                                                                     </li>
                                                                     <li>
-                                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#xoaloaihang">
+                                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#xoaloaihang{{ $loai->id }}">
                                                                             <em class="icon ni ni-trash"></em>
                                                                             <span>Xóa</span>
                                                                         </a>
@@ -82,7 +82,7 @@
                                             </td>
                                         </tr>
                                         @can('user')
-                                            <div class="modal fade" id="xoaloaihang" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scrollableLabel"
+                                            <div class="modal fade" id="xoaloaihang{{ $loai->id }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scrollableLabel"
                                                 aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-top">
                                                     <div class="modal-content">

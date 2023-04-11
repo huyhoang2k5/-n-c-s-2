@@ -22,17 +22,19 @@ class LoaiHangStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ten_loai_hang' => 'required|min:2|max:100|unique:loai_hang'
+            'ten_loai_hang' => 'required|max:255|unique:loai_hang,ten_loai_hang',
+            'id_trang_thai' => 'required|integer'
         ];
     }
 
     public function messages()
     {
         return [
-            'ten_loai_hang.required' => 'Cần thêm tên loại hàng!',
-            'ten_loai_hang.min' => 'Tên loại hàng phải lớn hơn 2 kí tự!',
-            'ten_loai_hang.max' => 'Độ dài cho phép tối đa là 100 kí tự!',
-            'ten_loai_hang.unique' => 'Tên loại hàng đã tồn tại!',
+            'ten_loai_hang.required' => 'Vui lòng nhập tên loại hàng',
+            'ten_loai_hang.max' => 'Tên loại hàng không được vượt quá :max ký tự',
+            'ten_loai_hang.unique' => 'Tên loại hàng đã tồn tại, vui lòng chọn tên khác',
+            'id_trang_thai.required' => 'Vui lòng chọn trạng thái',
+            'id_trang_thai.integer' => 'Vui lòng không truyền sai tham số vào trạng thái'
         ];
     }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->char('ma_ncc')->references('ma_ncc')->on('nha_cung_cap')->nullOnDelete();
             $table->integer('so_luong')->unsigned();
             $table->integer('so_luong_goc')->unsigned();
-            $table->integer('id_trang_thai')->default(3);
+            $table->foreignId('id_trang_thai')->constrained('trang_thai')->cascadeOnDelete();
             $table->integer('gia_nhap')->unsigned();
             $table->date('ngay_san_xuat')->default(now()->toDateString());
             $table->integer('tg_bao_quan')->unsigned()->nullable();

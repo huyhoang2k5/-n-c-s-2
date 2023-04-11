@@ -20,9 +20,7 @@
                             <div class="nk-block-head-content">
                                 @can('user')
                                     <ul class="d-flex">
-                                        <li><a href="{{ route('nha-cung-cap.create') }}" class="btn btn-primary btn-md d-md-none"><em
-                                                    class="icon ni ni-plus"></em><span>Thêm</span></a></li>
-                                        <li><a href="{{ route('nha-cung-cap.create') }}" class="btn btn-primary d-none d-md-inline-flex"><em
+                                        <li><a href="{{ route('nha-cung-cap.create') }}" class="btn btn-primary d-md-inline-flex"><em
                                                     class="icon ni ni-plus"></em><span>Thêm nhà cung cấp</span></a>
                                         </li>
                                     </ul>

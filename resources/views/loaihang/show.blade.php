@@ -30,9 +30,7 @@
                             </div>
                             <div class="nk-block-head-content">
                                 <ul class="d-flex">
-                                    <li><a href="{{ route('loai-hang.edit', $loai_hang->id) }}" class="btn btn-primary btn-md d-md-none"><em
-                                                class="icon ni ni-edit"></em><span>Sửa</span></a></li>
-                                    <li><a href="{{ route('loai-hang.edit', $loai_hang->id) }}" class="btn btn-primary d-none d-md-inline-flex"><em
+                                    <li><a href="{{ route('loai-hang.edit', $loai_hang->id) }}" class="btn btn-primary d-md-inline-flex"><em
                                                 class="icon ni ni-edit"></em></em><span>Sửa loại hàng</span></a>
                                     </li>
                                 </ul>

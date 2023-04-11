@@ -8,20 +8,19 @@
                         <div class="nk-block-head-between flex-wrap gap g-2">
                             <div class="nk-block-head-content">
                                 <h2 class="nk-block-title">Sửa</h2>
-                                    <nav>
-                                        <ol class="breadcrumb breadcrumb-arrow mb-0">
-                                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
-                                            </li>
-                                            <li class="breadcrumb-item"><a href="{{ route('nha-cung-cap.index') }}">Nhà cung cấp</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Sửa</li>
-                                        </ol>
-                                    </nav>
+                                <nav>
+                                    <ol class="breadcrumb breadcrumb-arrow mb-0">
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Trang chủ</a>
+                                        </li>
+                                        <li class="breadcrumb-item"><a href="{{ route('nha-cung-cap.index') }}">Nhà cung cấp</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Sửa</li>
+                                    </ol>
+                                </nav>
                             </div>
                         </div>
                     </div>
                     <div class="nk-block">
-                        <form action="{{ route('nha-cung-cap.update', $nha_cung_cap->ma_ncc) }}" method="post"
-                            enctype="multipart/form-data" id="form-edit">
+                        <form action="{{ route('nha-cung-cap.update', $nha_cung_cap->ma_ncc) }}" method="post" enctype="multipart/form-data" id="form-edit">
                             @csrf
                             @method('put')
                             <div class="row g-gs">
@@ -32,47 +31,32 @@
                                                 <div class="card-body">
                                                     <div class="row g-gs">
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"><label for="ten_ncc"
-                                                                    class="form-label">Tên nhà cung cấp</label>
-                                                                <div class="form-control-wrap"><input type="text"
-                                                                        class="form-control" id="ten_ncc"
-                                                                        name="ten_ncc"
-                                                                        value="{{ $nha_cung_cap->ten_ncc }}"
-                                                                        placeholder="Tên nhà cung cấp" required>
+                                                            <div class="form-group"><label for="ten_ncc" class="form-label">Tên nhà cung cấp</label>
+                                                                <div class="form-control-wrap"><input type="text" class="form-control" id="ten_ncc"
+                                                                        name="ten_ncc" value="{{ $nha_cung_cap->ten_ncc }}" placeholder="Tên nhà cung cấp" required>
                                                                 </div>
                                                                 @if ($errors)
-                                                                    <span
-                                                                        class="text-danger py-1 mt-2">{{ $errors->first('ten_ncc') }}</span>
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('ten_ncc') }}</span>
                                                                 @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"><label for="ma_ncc"
-                                                                    class="form-label">Mã nhà cung cấp</label>
-                                                                <div class="form-control-wrap"><input type="text"
-                                                                        class="form-control" id="ma_ncc"
-                                                                        name="ma_ncc"
-                                                                        value="{{ $nha_cung_cap->ma_ncc }}"
-                                                                        placeholder="Mã nhà cung cấp" required>
+                                                            <div class="form-group"><label for="ma_ncc" class="form-label">Mã nhà cung cấp</label>
+                                                                <div class="form-control-wrap"><input type="text" class="form-control" id="ma_ncc"
+                                                                        name="ma_ncc" value="{{ $nha_cung_cap->ma_ncc }}" placeholder="Mã nhà cung cấp" required>
                                                                 </div>
                                                                 @if ($errors)
-                                                                    <span
-                                                                        class="text-danger py-1 mt-2">{{ $errors->first('ma_ncc') }}</span>
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('ma_ncc') }}</span>
                                                                 @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6">
-                                                            <div class="form-group"><label for="sdt"
-                                                                    class="form-label">Số điện thoại</label>
-                                                                <div class="form-control-wrap"><input type="text"
-                                                                        class="form-control" id="sdt"
-                                                                        name="sdt"
-                                                                        value="0{{ $nha_cung_cap->sdt }}"
-                                                                        placeholder="Số điện thoại" required>
+                                                            <div class="form-group"><label for="sdt" class="form-label">Số điện thoại</label>
+                                                                <div class="form-control-wrap"><input type="text" class="form-control" id="sdt"
+                                                                        name="sdt" value="0{{ $nha_cung_cap->sdt }}" placeholder="Số điện thoại" required>
                                                                 </div>
                                                                 @if ($errors)
-                                                                    <span
-                                                                        class="text-danger py-1 mt-2">{{ $errors->first('sdt') }}</span>
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('sdt') }}</span>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -80,8 +64,7 @@
                                                             <div class="form-group"><label class="form-label">Trạng
                                                                     thái</label>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="js-select" name="id_trang_thai"
-                                                                        data-search="true" data-sort="false">
+                                                                    <select class="js-select" name="id_trang_thai" data-search="true" data-sort="false">
                                                                         <option value="">Select an option</option>
                                                                         @foreach ($trang_thai as $tt)
                                                                             <option value="{{ $tt->id }}"
@@ -89,20 +72,18 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
+                                                                @if ($errors)
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('id_trang_thai') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
-                                                            <div class="form-group"><label for="dia_chi"
-                                                                    class="form-label">Địa chỉ</label>
-                                                                <div class="form-control-wrap"><input type="text"
-                                                                        class="form-control" id="dia_chi"
-                                                                        name="dia_chi"
-                                                                        value="{{ $nha_cung_cap->dia_chi }}"
-                                                                        placeholder="Địa chỉ" required>
+                                                            <div class="form-group"><label for="dia_chi" class="form-label">Địa chỉ</label>
+                                                                <div class="form-control-wrap"><input type="text" class="form-control" id="dia_chi"
+                                                                        name="dia_chi" value="{{ $nha_cung_cap->dia_chi }}" placeholder="Địa chỉ" required>
                                                                 </div>
                                                                 @if ($errors)
-                                                                    <span
-                                                                        class="text-danger py-1 mt-2">{{ $errors->first('dia_chi') }}</span>
+                                                                    <span class="text-danger py-1 mt-2">{{ $errors->first('dia_chi') }}</span>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -110,13 +91,10 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Chi tiết</label>
                                                                 <div class="form-control-wrap">
-                                                                    <div class="js-quill" name="mo_ta" id="quill_editor"
-                                                                        value="{!! $nha_cung_cap->mo_ta !!}"
-                                                                        data-toolbar="minimal"
-                                                                        data-placeholder="Viết chi tiết nhà cung cấp vào đây...">
+                                                                    <div class="js-quill" name="mo_ta" id="quill_editor" value="{!! $nha_cung_cap->mo_ta !!}"
+                                                                        data-toolbar="minimal" data-placeholder="Viết chi tiết nhà cung cấp vào đây...">
                                                                     </div>
-                                                                    <input type="hidden" name="mo_ta"
-                                                                        value="{{ $nha_cung_cap->mo_ta }}">
+                                                                    <input type="hidden" name="mo_ta" value="{{ $nha_cung_cap->mo_ta }}">
                                                                 </div>
                                                             </div>
                                                         </div>

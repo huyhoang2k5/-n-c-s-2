@@ -58,10 +58,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    $result = 0;
-                                                @endphp
-
                                                 @foreach ($chi_tiet_phieu_nhap as $key => $chi_tiet)
                                                     <tr>
                                                         <td class="tb-col">
@@ -95,6 +91,7 @@
                                         </table>
                                     </div>
                                 </div>
+                                @include('parts.paginate', ['paginator' => $chi_tiet_phieu_nhap])
                             </div>
                         </div>
                     </div>
