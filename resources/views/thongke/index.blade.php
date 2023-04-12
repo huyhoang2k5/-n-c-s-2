@@ -104,6 +104,7 @@
                                         <th class="tb-col"><span class="overline-title">STT</span></th>
                                         <th class="tb-col"><span class="overline-title">Mã hàng hóa</span></th>
                                         <th class="tb-col"><span class="overline-title">Tên hàng hóa</span></th>
+                                        <th class="tb-col"><span class="overline-title">Tồn kho</span></th>
                                         <th class="tb-col"><span class="overline-title">Nhập</span></th>
                                         <th class="tb-col"><span class="overline-title">Tổng giá trị</span></th>
                                         <th class="tb-col"><span class="overline-title">Xuất</span></th>
@@ -125,6 +126,7 @@
                                                         href="{{ route('hang-hoa.show', $tk->ma_hang_hoa) }}">{{ strlen($tk->ten_hang_hoa) > 20 ? substr($tk->ten_hang_hoa, 0, 20) . '...' : substr($tk->ten_hang_hoa, 0, 20) }}</a>
                                                 </div>
                                             </td>
+                                            <td class="tb-col"><span> {{ $tk->get_chi_tiet_sum_so_luong }}</span></td>
                                             <td class="tb-col"><span> {{ $tk->get_chi_tiet_sum_so_luong_goc }}</span></td>
                                             <td class="tb-col"><span> {{ number_format($tk->gia_nhap, 0, '', '.') }} VNĐ</span></td>
                                             <td class="tb-col"><span> {{ $tk->get_chi_tiet_xuat_kho_sum_so_luong }}</span></td>
