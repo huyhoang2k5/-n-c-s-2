@@ -25,11 +25,11 @@ class ThongKeExport implements FromArray, WithHeadings, ShouldAutoSize
                 $row->ten_loai_hang,
                 $row->ma_hang_hoa,
                 $row->ten_hang_hoa,
-                $row->ton_kho,
                 $row->get_chi_tiet_sum_so_luong,
-                $row->get_chi_tiet_sum_gia_nhap,
+                $row->get_chi_tiet_sum_so_luong_goc,
+                $row->gia_nhap,
                 $row->get_chi_tiet_xuat_kho_sum_so_luong,
-                $row->get_chi_tiet_xuat_kho_sum_gia_xuat,
+                $row->gia_xuat,
                 $row->lai,
             ];
         }

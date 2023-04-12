@@ -43,6 +43,9 @@ class ThongKeController extends Controller
         ->withSum(['getChiTiet' => function ($query) {
             $query->selectRaw('so_luong_goc');
         }], 'so_luong_goc')
+        ->withSum(['getChiTiet' => function ($query) {
+            $query->selectRaw('so_luong');
+        }], 'so_luong')
         ->withSum(['getChiTietXuatKho' => function ($query) {
             $query->selectRaw('so_luong');
         }], 'so_luong')
@@ -57,10 +60,6 @@ class ThongKeController extends Controller
                     return $h->so_luong * $h->gia_xuat;
             });
 
-            $ton_kho = $hang->getChiTiet->sum(function ($h) {
-                return $h->so_luong_goc - $h->so_luong;
-            });
-
             $gia_xuat = $hang->getChiTietXuatKho->sum(function ($h) {
                 return $h->gia_xuat * $h->so_luong;
             });
@@ -73,7 +72,6 @@ class ThongKeController extends Controller
 
             $hang['lai'] = $dt_xuat - $dt_nhap;
             $hang['ten_loai_hang'] = $ten_loai_hang;
-            $hang['ton_kho'] = $ton_kho;
             $hang->gia_xuat = $gia_xuat;
             $hang->gia_nhap = $gia_nhap;
         }
