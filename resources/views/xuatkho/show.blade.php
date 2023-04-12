@@ -90,7 +90,7 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <td colspan="5"></td>
+                                                    <td colspan="6"></td>
                                                     <td colspan="">Tổng:</td>
                                                     <td class="tb-col tb-col-end">{{ number_format($result, 0, '', ',') }} VNĐ</td>
                                                 </tr>

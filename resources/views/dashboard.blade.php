@@ -121,8 +121,8 @@
                 url: '{{ route('api.doanh-thu') }}',
                 method: 'GET',
                 success: function(response) {
-                    var ctx = document.getElementById('chart').getContext('2d');
-                    var myChart = new Chart(ctx, {
+                    let ctx = document.getElementById('chart').getContext('2d');
+                    let myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
                             labels: response.labels,
